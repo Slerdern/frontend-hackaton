@@ -1,8 +1,10 @@
 <template>
   <footer class="page-footer">
-    <p>Nos etoiles sont certifiees par des personnes formees et experimentees.</p>
+    <p>
+      Nos inspecteurs certifient chaque adresse en toute independance selon une methode commune et transparente.
+    </p>
     <div class="footer-bottom">
-      <span class="square-btn">LOGO</span>
+      <span class="square-btn">✽</span>
       <small>Guide Michelin - Tous droits reserves - 2026</small>
     </div>
   </footer>

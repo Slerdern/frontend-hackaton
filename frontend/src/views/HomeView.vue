@@ -1,5 +1,5 @@
 <template>
-  <main class="mobile-wrapper home-page">
+  <main class="home-page">
     <NavBar :is-authenticated="authStore.isAuthenticated" @toggle-auth="toggleAuth" @toggle-chat="toggleChat" />
 
     <HeroSection
@@ -9,9 +9,68 @@
       @do-search="runClassicSearch"
     />
 
-    <CardSection title="Recommandes des experts certifies par le Guide Michelin" :items="sections.experts" />
-    <CardSection title="Nos dernieres selections - Restaurants" :items="sections.latest" />
-    <CardSection title="Autres adresses a decouvrir" :items="sections.extra" />
+    <section class="content-shell">
+      <CardSection title="Recommandes des experts certifies par le Guide Michelin" :items="sections.experts" />
+      <CardSection title="Nos dernieres selections - Restaurants" :items="sections.latest" />
+      <CardSection title="Nos dernieres selections - Hebergements" :items="sections.stays" />
+
+      <section class="concepts-section">
+        <h2 class="section-title">Nos concepts</h2>
+        <article v-for="concept in concepts" :key="concept.title" class="concept-card">
+          <div class="concept-thumb" :style="{ backgroundImage: `url(${concept.image})` }"></div>
+          <div class="concept-copy">
+            <h3>{{ concept.title }}</h3>
+            <p>{{ concept.text }}</p>
+          </div>
+        </article>
+      </section>
+
+      <section class="articles-section">
+        <h2 class="section-title">Nos derniers articles</h2>
+        <div class="article-grid">
+          <article v-for="article in articles" :key="article.title" class="article-card">
+            <img :src="article.image" :alt="article.title" />
+            <div class="article-copy">
+              <h3>{{ article.title }}</h3>
+              <p>{{ article.meta }}</p>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="articles-section info-section">
+        <h2 class="section-title">En savoir plus sur le Guide MICHELIN</h2>
+        <div class="article-grid">
+          <article v-for="item in infoCards" :key="item.title" class="article-card">
+            <img :src="item.image" :alt="item.title" />
+            <div class="article-copy">
+              <h3>{{ item.title }}</h3>
+              <p>{{ item.meta }}</p>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="about-guide">
+        <div class="about-stamp">GUIDE</div>
+        <h2>En savoir plus sur nous</h2>
+        <p>
+          Le Guide est un repere fiable avec une voix humaine, basee sur une selection exigeante.
+        </p>
+        <button type="button">Tout savoir sur le Guide Michelin</button>
+      </section>
+
+      <section class="partners-section">
+        <h2 class="section-title">Nos partenaires</h2>
+        <article v-for="partner in partners" :key="partner.name" class="partner-row">
+          <div class="partner-logo">{{ partner.logo }}</div>
+          <div>
+            <h3>{{ partner.name }}</h3>
+            <p>{{ partner.role }}</p>
+          </div>
+        </article>
+      </section>
+    </section>
 
     <AppFooter />
 
@@ -64,13 +123,71 @@ const followUps = ref([]);
 const sections = reactive({
   experts: [],
   latest: [],
-  extra: []
+  stays: []
 });
+
+const concepts = [
+  {
+    title: 'Les Best-Of',
+    text: 'Decouvrez les lieux d exception pour consommer, parfaitement adaptes a vos envies.',
+    image:
+      'https://images.unsplash.com/photo-1514326640560-7d063ef2aed5?auto=format&fit=crop&w=400&q=80'
+  },
+  {
+    title: 'Les Country by Guide MICHELIN',
+    text: 'Le meilleur de nos selections dans des recits inspires.',
+    image:
+      'https://images.unsplash.com/photo-1559339352-11d035aa65de?auto=format&fit=crop&w=400&q=80'
+  },
+  {
+    title: 'Le Guide MICHELIN Plus',
+    text: 'Un service personnalise et des avantages exclusifs dans nos hubs.',
+    image:
+      'https://images.unsplash.com/photo-1534447677768-be436bb09401?auto=format&fit=crop&w=400&q=80'
+  }
+];
+
+const articles = [
+  {
+    title: 'Tour du monde des restaurants les plus originaux de la selection',
+    meta: '5 min | 17 avril 2026',
+    image:
+      'https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=500&q=80'
+  },
+  {
+    title: 'La liste complete des restaurants du Guide MICHELIN 2026',
+    meta: '3 min | 19 mars 2026',
+    image:
+      'https://images.unsplash.com/photo-1466978913421-dad2ebd01d17?auto=format&fit=crop&w=500&q=80'
+  }
+];
+
+const infoCards = [
+  {
+    title: 'Tour du monde des restaurants les plus originaux de la selection',
+    meta: '5 min | 28 novembre 2025',
+    image:
+      'https://images.unsplash.com/photo-1552566626-52f8b828add9?auto=format&fit=crop&w=500&q=80'
+  },
+  {
+    title: 'La Clef MICHELIN : le dernier palmares',
+    meta: '4 min | 18 septembre 2025',
+    image:
+      'https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=500&q=80'
+  }
+];
+
+const partners = [
+  { logo: 'BL', name: 'Blancpain', role: 'Global Partner' },
+  { logo: 'LF', name: 'Lafont', role: 'Global Partner' },
+  { logo: 'HM', name: 'Metro', role: 'Official Partner' },
+  { logo: 'TF', name: 'TheFork', role: 'Official Booking Partner' }
+];
 
 function splitForSections(restaurants) {
   sections.experts = restaurants.slice(0, 2);
   sections.latest = restaurants.slice(2, 4);
-  sections.extra = restaurants.slice(4, 6);
+  sections.stays = restaurants.slice(4, 6);
 }
 
 async function loadInitialFeed() {
