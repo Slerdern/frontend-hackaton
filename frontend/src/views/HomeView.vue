@@ -1,5 +1,5 @@
 <template>
-  <main class="home-page">
+  <main id="top" class="home-page">
     <NavBar :is-authenticated="authStore.isAuthenticated" @toggle-auth="toggleAuth" @toggle-chat="toggleChat" />
 
     <HeroSection
@@ -10,11 +10,11 @@
     />
 
     <section class="content-shell">
-      <CardSection title="Recommandes des experts certifies par le Guide Michelin" :items="sections.experts" />
+      <CardSection id="experts" title="Recommandes des experts certifies par le Guide Michelin" :items="sections.experts" />
       <CardSection title="Nos dernieres selections - Restaurants" :items="sections.latest" />
       <CardSection title="Nos dernieres selections - Hebergements" :items="sections.stays" />
 
-      <section class="concepts-section">
+      <section id="concepts" class="concepts-section">
         <h2 class="section-title">Nos concepts</h2>
         <article v-for="concept in concepts" :key="concept.title" class="concept-card">
           <div class="concept-thumb" :style="{ backgroundImage: `url(${concept.image})` }"></div>
@@ -25,7 +25,7 @@
         </article>
       </section>
 
-      <section class="articles-section">
+      <section id="articles" class="articles-section">
         <h2 class="section-title">Nos derniers articles</h2>
         <div class="article-grid">
           <article v-for="article in articles" :key="article.title" class="article-card">
@@ -38,7 +38,7 @@
         </div>
       </section>
 
-      <section class="articles-section info-section">
+      <section id="guide-michelin" class="articles-section info-section">
         <h2 class="section-title">En savoir plus sur le Guide MICHELIN</h2>
         <div class="article-grid">
           <article v-for="item in infoCards" :key="item.title" class="article-card">
@@ -51,8 +51,10 @@
         </div>
       </section>
 
-      <section class="about-guide">
-        <div class="about-stamp">GUIDE</div>
+      <section id="about" class="about-guide">
+        <div class="about-guide-visual">
+          <img src="/img/guide.png" alt="Guide Michelin Livre">
+        </div>
         <h2>En savoir plus sur nous</h2>
         <p>
           Le Guide est un repere fiable avec une voix humaine, basee sur une selection exigeante.
@@ -60,7 +62,7 @@
         <button type="button">Tout savoir sur le Guide Michelin</button>
       </section>
 
-      <section class="partners-section">
+      <section id="partners" class="partners-section">
         <h2 class="section-title">Nos partenaires</h2>
         <article v-for="partner in partners" :key="partner.name" class="partner-row">
           <div class="partner-logo">{{ partner.logo }}</div>
