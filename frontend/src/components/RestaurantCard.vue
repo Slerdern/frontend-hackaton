@@ -2,10 +2,13 @@
   <article class="restaurant-card">
     <img :src="imageSrc" :alt="restaurant.name" />
     <div class="restaurant-card-footer">
-      <div class="card-star">*</div>
+      <div class="card-topline">
+        <span class="card-star">✶</span>
+        <span class="card-type">{{ restaurant.cuisine || 'Cuisine' }}</span>
+      </div>
       <strong>{{ restaurant.name || 'Restaurant' }}</strong>
       <small>{{ restaurant.location || 'Ville non renseignee' }}</small>
-      <small>{{ restaurant.cuisine || 'Cuisine non renseignee' }} | Note {{ ratingLabel }}</small>
+      <small>Note {{ ratingLabel }}</small>
     </div>
   </article>
 </template>
