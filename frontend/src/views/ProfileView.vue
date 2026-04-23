@@ -121,12 +121,27 @@
                 <p class="profile-place-location">{{ place.placeLocation }}</p>
 
                 <button
+                  v-if="reviewingReservationId !== `${place.kind}-${place.placeId}`"
                   type="button"
                   class="profile-review-btn profile-review-btn-primary profile-place-review-trigger"
                   @click="handleReviewClick(place)"
                 >
                   Laisser un avis
                 </button>
+
+                <div
+                  v-if="submitReviewError && reviewMessagePlaceId === `${place.kind}-${place.placeId}`"
+                  class="profile-review-error"
+                >
+                  {{ submitReviewError }}
+                </div>
+
+                <div
+                  v-if="reviewSubmitted && reviewMessagePlaceId === `${place.kind}-${place.placeId}`"
+                  class="profile-review-success"
+                >
+                  Votre avis a été envoyé avec succès!
+                </div>
 
                 <div v-if="reviewingReservationId === `${place.kind}-${place.placeId}`" class="profile-review-form">
                   <h5>Laisser un avis</h5>
@@ -156,9 +171,6 @@
                   </div>
                   <div v-if="submitReviewError" class="profile-review-error">
                     {{ submitReviewError }}
-                  </div>
-                  <div v-if="reviewSubmitted" class="profile-review-success">
-                    Votre avis a été envoyé avec succès!
                   </div>
                 </div>
               </div>
@@ -264,6 +276,7 @@ const validatedHotels = ref([]);
 const validatedReservationsLoading = ref(false);
 const validatedReservationsError = ref('');
 const reviewingReservationId = ref(null);
+const reviewMessagePlaceId = ref('');
 const reviewText = ref('');
 const submitReviewLoading = ref(false);
 const submitReviewError = ref('');
@@ -660,13 +673,13 @@ function parseCanReviewResponse(response) {
 }
 
 async function handleReviewClick(place) {
+  reviewMessagePlaceId.value = `${place.kind}-${place.placeId}`;
   submitReviewError.value = '';
   reviewSubmitted.value = false;
 
   try {
     if (!place?.placeId) {
       submitReviewError.value = 'Impossible de vérifier cette réservation (ID manquant).';
-      window.alert('Impossible de vérifier cette réservation (ID manquant).');
       return;
     }
 
@@ -682,7 +695,6 @@ async function handleReviewClick(place) {
 
     if (!canReview) {
       submitReviewError.value = "Vous devez vivre l'expérience pour laisser un avis";
-      window.alert("Vous devez vivre l'expérience pour laisser un avis");
       return;
     }
 
@@ -695,7 +707,6 @@ async function handleReviewClick(place) {
       error?.message ||
       'Impossible de vérifier la réservation pour le moment.';
     submitReviewError.value = message;
-    window.alert(message);
   }
 }
 
@@ -791,6 +802,7 @@ async function submitReview(reservationId, type) {
     }
 
     reviewSubmitted.value = true;
+    reviewMessagePlaceId.value = `${type}-${reservationId}`;
     reviewText.value = '';
     reviewingReservationId.value = null;
     
