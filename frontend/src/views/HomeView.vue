@@ -23,7 +23,17 @@
       <section id="concepts" class="concepts-section">
         <h2 class="section-title">Nos concepts</h2>
         <article v-for="concept in concepts" :key="concept.title" class="concept-card">
-          <div class="concept-thumb" :style="{ backgroundImage: `url(${concept.image})` }"></div>
+          <a
+            v-if="toSafeExternalLink(concept.link)"
+            class="image-link"
+            :href="toSafeExternalLink(concept.link)"
+            target="_blank"
+            rel="noopener noreferrer"
+            :aria-label="`Voir ${concept.title}`"
+          >
+            <div class="concept-thumb" :style="{ backgroundImage: `url(${concept.image})` }"></div>
+          </a>
+          <div v-else class="concept-thumb" :style="{ backgroundImage: `url(${concept.image})` }"></div>
           <div class="concept-copy">
             <h3>{{ concept.title }}</h3>
             <p>{{ concept.text }}</p>
@@ -35,7 +45,19 @@
         <h2 class="section-title">Nos derniers articles</h2>
         <div class="article-grid">
           <article v-for="article in articles" :key="article.title" class="article-card">
-            <div class="article-card-gallery">
+            <a
+              v-if="toSafeExternalLink(article.link)"
+              class="image-link"
+              :href="toSafeExternalLink(article.link)"
+              target="_blank"
+              rel="noopener noreferrer"
+              :aria-label="`Lire ${article.title}`"
+            >
+              <div class="article-card-gallery">
+                <img v-for="image in article.images" :key="image" :src="image" :alt="article.title" />
+              </div>
+            </a>
+            <div v-else class="article-card-gallery">
               <img v-for="image in article.images" :key="image" :src="image" :alt="article.title" />
             </div>
             <div class="article-copy">
@@ -69,7 +91,19 @@
         <h2 class="section-title">En savoir plus sur le Guide MICHELIN</h2>
         <div class="article-grid">
           <article v-for="item in infoCards" :key="item.title" class="article-card">
-            <div class="article-card-gallery">
+            <a
+              v-if="toSafeExternalLink(item.link)"
+              class="image-link"
+              :href="toSafeExternalLink(item.link)"
+              target="_blank"
+              rel="noopener noreferrer"
+              :aria-label="`Voir ${item.title}`"
+            >
+              <div class="article-card-gallery">
+                <img v-for="image in item.images" :key="image" :src="image" :alt="item.title" />
+              </div>
+            </a>
+            <div v-else class="article-card-gallery">
               <img v-for="image in item.images" :key="image" :src="image" :alt="item.title" />
             </div>
             <div class="article-copy">
@@ -101,7 +135,15 @@
 
       <section id="about" class="about-guide">
         <div class="about-guide-visual">
-          <img src="/img/guide.png" alt="Guide Michelin Livre">
+          <a
+            class="image-link"
+            href="https://guide.michelin.com/fr/fr"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Ouvrir le site du Guide Michelin"
+          >
+            <img src="/img/guide.png" alt="Guide Michelin Livre">
+          </a>
         </div>
         <h2>En savoir plus sur nous</h2>
         <p>
@@ -161,6 +203,7 @@ import NavBar from '../components/NavBar.vue';
 import { getWelcomeMessage, searchWithAi } from '../services/aiService';
 import { searchRestaurants } from '../services/restaurantService';
 import { useAuthStore } from '../stores/authStore';
+import { toSafeExternalLink } from '../utils/formatters';
 
 const authStore = useAuthStore();
 
@@ -183,18 +226,21 @@ const concepts = [
   {
     title: 'Les Best-Of',
     text: 'Decouvrez les lieux d exception pour consommer, parfaitement adaptes a vos envies.',
+    link: 'https://guide.michelin.com/fr/fr/restaurants',
     image:
       'https://images.unsplash.com/photo-1514326640560-7d063ef2aed5?auto=format&fit=crop&w=400&q=80'
   },
   {
     title: 'Les Country by Guide MICHELIN',
     text: 'Le meilleur de nos selections dans des recits inspires.',
+    link: 'https://guide.michelin.com/fr/fr/article/travel',
     image:
       'https://images.unsplash.com/photo-1559339352-11d035aa65de?auto=format&fit=crop&w=400&q=80'
   },
   {
     title: 'Le Guide MICHELIN Plus',
     text: 'Un service personnalise et des avantages exclusifs dans nos hubs.',
+    link: 'https://guide.michelin.com/fr/fr/article/features/michelin-guide-app',
     image:
       'https://images.unsplash.com/photo-1534447677768-be436bb09401?auto=format&fit=crop&w=400&q=80'
   }
@@ -206,6 +252,7 @@ const articles = [
     readTime: '7 min',
     date: '17 avril 2026',
     tag: 'VOYAGE',
+    link: 'https://guide.michelin.com/fr/fr/article/travel',
     images: [
       'https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=700&q=80',
       'https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=700&q=80'
@@ -216,6 +263,7 @@ const articles = [
     readTime: '16 min',
     date: '16 mars 2026',
     tag: 'ACTU',
+    link: 'https://guide.michelin.com/fr/fr/article/news-and-views',
     images: [
       'https://images.unsplash.com/photo-1466978913421-dad2ebd01d17?auto=format&fit=crop&w=700&q=80',
       'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=700&q=80'
@@ -229,6 +277,7 @@ const infoCards = [
     readTime: '5 min',
     date: '28 novembre 2025',
     tag: 'GUIDE',
+    link: 'https://guide.michelin.com/fr/fr/article/features',
     images: [
       'https://images.unsplash.com/photo-1552566626-52f8b828add9?auto=format&fit=crop&w=700&q=80',
       'https://images.unsplash.com/photo-1455390582262-044cdead277a?auto=format&fit=crop&w=700&q=80'
@@ -239,6 +288,7 @@ const infoCards = [
     readTime: '4 min',
     date: '18 septembre 2025',
     tag: 'HOTELS',
+    link: 'https://guide.michelin.com/fr/fr/hotels-stays',
     images: [
       'https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=700&q=80',
       'https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?auto=format&fit=crop&w=700&q=80'

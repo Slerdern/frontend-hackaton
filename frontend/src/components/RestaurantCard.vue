@@ -1,6 +1,16 @@
 <template>
   <article class="restaurant-card">
-    <img :src="imageSrc" :alt="restaurant.name" />
+    <a
+      v-if="destinationUrl"
+      class="image-link"
+      :href="destinationUrl"
+      target="_blank"
+      rel="noopener noreferrer"
+      :aria-label="`Voir ${displayName} sur son site`"
+    >
+      <img :src="imageSrc" :alt="restaurant.name" />
+    </a>
+    <img v-else :src="imageSrc" :alt="restaurant.name" />
     <div class="restaurant-card-footer">
       <div class="card-mark" aria-hidden="true">
         <svg viewBox="0 0 24 24" role="presentation">
@@ -19,7 +29,7 @@
 <script setup>
 import { computed } from 'vue';
 
-import { toDisplayPrice, toPhotoFallback } from '../utils/formatters';
+import { toDisplayPrice, toPhotoFallback, toSafeExternalLink } from '../utils/formatters';
 
 const props = defineProps({
   restaurant: {
@@ -30,6 +40,25 @@ const props = defineProps({
 
 const displayName = computed(() => props.restaurant.name || 'Restaurant');
 const imageSrc = computed(() => props.restaurant.photoUrl || toPhotoFallback(props.restaurant.name));
+const destinationUrl = computed(() => {
+  const rawUrl =
+    props.restaurant.websiteUrl ||
+    props.restaurant.website_url ||
+    props.restaurant.website ||
+    props.restaurant.url ||
+    props.restaurant.link ||
+    props.restaurant.michelinUrl ||
+    props.restaurant.michelin_url ||
+    props.restaurant.reservationUrl ||
+    props.restaurant.reservation_url ||
+    props.restaurant.links?.website ||
+    props.restaurant.links?.michelin ||
+    props.restaurant.links?.reservation ||
+    props.restaurant.contact?.website ||
+    '';
+
+  return toSafeExternalLink(rawUrl);
+});
 const locationLabel = computed(() => props.restaurant.location || 'Ville non renseignee');
 const metadataLabel = computed(() => {
   const price = toDisplayPrice(props.restaurant.price);
