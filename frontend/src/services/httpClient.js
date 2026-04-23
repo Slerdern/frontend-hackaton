@@ -1,9 +1,9 @@
 import axios from 'axios';
 
-const baseURL = 'https://guide-michelin.onrender.com';
+export const API_BASE_URL = 'https://guide-michelin.onrender.com';
 
 const httpClient = axios.create({
-  baseURL,
+  baseURL: API_BASE_URL,
   timeout: 20000,
   headers: {
     'Content-Type': 'application/json'

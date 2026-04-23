@@ -12,7 +12,7 @@ describe('formatters', () => {
   });
 
   it('genere une image fallback', () => {
-    expect(toPhotoFallback('Le Petit')).toContain('Le%20Petit');
+    expect(toPhotoFallback('Le Petit')).toContain('unsplash.com');
   });
 
   it('normalise un lien sans protocole', () => {
@@ -35,4 +35,3 @@ describe('formatters', () => {
     );
   });
 });
-

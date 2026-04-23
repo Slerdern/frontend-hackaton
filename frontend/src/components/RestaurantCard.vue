@@ -8,9 +8,9 @@
       rel="noopener noreferrer"
       :aria-label="`Voir ${displayName} sur son site`"
     >
-      <img :src="imageSrc" :alt="restaurant.name" />
+      <img :src="imageSrc" :alt="restaurant.name" @error="handleImageError" />
     </a>
-    <img v-else :src="imageSrc" :alt="restaurant.name" />
+    <img v-else :src="imageSrc" :alt="restaurant.name" @error="handleImageError" />
     <div class="restaurant-card-footer">
       <div class="card-mark" aria-hidden="true">
         <svg viewBox="0 0 24 24" role="presentation">
@@ -27,9 +27,9 @@
 </template>
 
 <script setup>
-import { computed } from 'vue';
+import { computed, ref, watch } from 'vue';
 
-import { toDisplayPrice, toPhotoFallback, toSafeExternalLink } from '../utils/formatters';
+import { toAbsoluteImageUrl, toDisplayPrice, toSafeExternalLink } from '../utils/formatters';
 
 const props = defineProps({
   restaurant: {
@@ -39,7 +39,7 @@ const props = defineProps({
 });
 
 const displayName = computed(() => props.restaurant.name || 'Restaurant');
-const imageSrc = computed(() => props.restaurant.photoUrl || toPhotoFallback(props.restaurant.name));
+const imageSrc = ref(toAbsoluteImageUrl(props.restaurant.photoUrl, props.restaurant.name));
 const destinationUrl = computed(() => {
   const rawUrl =
     props.restaurant.websiteUrl ||
@@ -66,4 +66,16 @@ const metadataLabel = computed(() => {
 
   return `${price} • ${category}`;
 });
+
+watch(
+  () => [props.restaurant.photoUrl, props.restaurant.name],
+  () => {
+    imageSrc.value = toAbsoluteImageUrl(props.restaurant.photoUrl, props.restaurant.name);
+  },
+  { immediate: true }
+);
+
+function handleImageError() {
+  imageSrc.value = toAbsoluteImageUrl('', props.restaurant.name);
+}
 </script>

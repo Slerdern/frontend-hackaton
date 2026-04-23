@@ -26,7 +26,7 @@
           <path d="M11 13.5C11.3978 13.5 11.7794 13.342 12.0607 13.0607C12.342 12.7794 12.5 12.3978 12.5 12C12.5 11.6022 12.342 11.2206 12.0607 10.9393C11.7794 10.658 11.3978 10.5 11 10.5C10.6022 10.5 10.2206 10.658 9.93934 10.9393C9.65804 11.2206 9.5 11.6022 9.5 12C9.5 12.3978 9.65804 12.7794 9.93934 13.0607C10.2206 13.342 10.6022 13.5 11 13.5Z" fill="black" stroke="#C30039" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
       </button>
-      <template v-if="isAuthenticated">
+      <template v-if="hasSessionUser">
         <a class="account-btn" :class="{ 'nav-action-hidden': menuOpen }" href="/profil">Mon profil</a>
       </template>
       <template v-else>
@@ -35,9 +35,9 @@
         </button>
       </template>
       <button class="menu-btn" :class="{ 'nav-action-hidden': menuOpen }" @click="menuOpen = !menuOpen" :aria-expanded="menuOpen" aria-label="Ouvrir le menu"><svg width="20" height="16" viewBox="0 0 20 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path d="M20 14.7368C20 15.0719 19.8683 15.3931 19.6339 15.63C19.3995 15.8669 19.0815 16 18.75 16L6.25 16C5.91848 16 5.60054 15.8669 5.36612 15.63C5.1317 15.3931 5 15.0719 5 14.7368C5 14.4018 5.1317 14.0805 5.36612 13.8437C5.60054 13.6068 5.91848 13.4737 6.25 13.4737L18.75 13.4737C19.0815 13.4737 19.3995 13.6068 19.6339 13.8437C19.8683 14.0805 20 14.4018 20 14.7368ZM20 1.26316C20 1.59817 19.8683 1.91946 19.6339 2.15634C19.3995 2.39323 19.0815 2.52632 18.75 2.52632L7.91667 2.52632C7.58515 2.52632 7.2672 2.39323 7.03278 2.15634C6.79836 1.91946 6.66667 1.59817 6.66667 1.26316C6.66667 0.928147 6.79836 0.606859 7.03278 0.369971C7.2672 0.133082 7.58515 0 7.91667 0L18.75 0C19.0815 0 19.3995 0.133082 19.6339 0.369971C19.8683 0.606859 20 0.928147 20 1.26316ZM18.75 9.26316C19.0815 9.26316 19.3995 9.13008 19.6339 8.89319C19.8683 8.6563 20 8.33501 20 8C20 7.66499 19.8683 7.3437 19.6339 7.10681C19.3995 6.86992 19.0815 6.73684 18.75 6.73684L1.25 6.73684C0.91848 6.73684 0.600538 6.86992 0.366117 7.10681C0.131697 7.3437 0 7.66499 0 8C0 8.33501 0.131697 8.6563 0.366117 8.89319C0.600538 9.13008 0.91848 9.26316 1.25 9.26316L18.75 9.26316Z" fill="white"/>
-</svg>
-</button>
+        <path d="M20 14.7368C20 15.0719 19.8683 15.3931 19.6339 15.63C19.3995 15.8669 19.0815 16 18.75 16L6.25 16C5.91848 16 5.60054 15.8669 5.36612 15.63C5.1317 15.3931 5 15.0719 5 14.7368C5 14.4018 5.1317 14.0805 5.36612 13.8437C5.60054 13.6068 5.91848 13.4737 6.25 13.4737L18.75 13.4737C19.0815 13.4737 19.3995 13.6068 19.6339 13.8437C19.8683 14.0805 20 14.4018 20 14.7368ZM20 1.26316C20 1.59817 19.8683 1.91946 19.6339 2.15634C19.3995 2.39323 19.0815 2.52632 18.75 2.52632L7.91667 2.52632C7.58515 2.52632 7.2672 2.39323 7.03278 2.15634C6.79836 1.91946 6.66667 1.59817 6.66667 1.26316C6.66667 0.928147 6.79836 0.606859 7.03278 0.369971C7.2672 0.133082 7.58515 0 7.91667 0L18.75 0C19.0815 0 19.3995 0.133082 19.6339 0.369971C19.8683 0.606859 20 0.928147 20 1.26316ZM18.75 9.26316C19.0815 9.26316 19.3995 9.13008 19.6339 8.89319C19.8683 8.6563 20 8.33501 20 8C20 7.66499 19.8683 7.3437 19.6339 7.10681C19.3995 6.86992 19.0815 6.73684 18.75 6.73684L1.25 6.73684C0.91848 6.73684 0.600538 6.86992 0.366117 7.10681C0.131697 7.3437 0 7.66499 0 8C0 8.33501 0.131697 8.6563 0.366117 8.89319C0.600538 9.13008 0.91848 9.26316 1.25 9.26316L18.75 9.26316Z" fill="white"/>
+        </svg>
+      </button>
     </nav>
 
     <div v-if="menuOpen" class="side-panel-backdrop" @click.self="closeMenu">
@@ -49,14 +49,9 @@
             </svg>
           </button>
         </div>
-
-        <button class="account-btn menu-account-btn" @click="openAuthFromMenu">
-          {{ isAuthenticated ? 'Mon compte' : 'Inscription / Connexion' }}
-        </button>
-
-      <button 
-        v-if="!isAuthenticated" 
-        class="account-btn menu-account-btn" 
+      <button
+        v-if="!hasSessionUser"
+        class="account-btn menu-account-btn"
         @click="openAuthFromMenu"
       >
         Inscription / Connexion
@@ -72,11 +67,11 @@
             />
           </div>
           <div class="panel-user-infos">
-            <p> Nom : {{ user.name }}</p>
-            <p> Mail : {{ user.email }}</p>
+            <p>Nom : {{ displayName }}</p>
+            <p>Mail : {{ user?.email || '' }}</p>
           </div>
           <div class="user-navigation-btn">
-            
+
             <a href="/profil" @click="closeMenu">Profil</a>
             <button type="button" class="logout-btn" @click="logoutFromMenu">Déconnexion</button>
           </div>
@@ -91,15 +86,20 @@
         </svg>
       </button>
 
-        <nav class="menu-links" aria-label="Liens de navigation">
-          <a href="#top" @click="closeMenu">Accueil</a>
-          <a href="#experts" @click="closeMenu">Recommandés des experts</a>
-          <a href="#concepts" @click="closeMenu">Nos concepts</a>
-          <a href="#articles" @click="closeMenu">Nos articles</a>
-          <a href="#guide-michelin" @click="closeMenu">En savoir plus sur le Guide Michelin</a>
-          <a href="#about" @click="closeMenu">En savoir plus sur nous</a>
-          <a href="#partners" @click="closeMenu">Nos partenaires</a>
-        </nav>
+      <nav class="menu-links" aria-label="Liens de navigation">
+        <a href="#top" @click="closeMenu">Accueil</a>
+        <a href="#experts" @click="closeMenu">Recommandés des experts</a>
+        <a href="#concepts" @click="closeMenu">Nos concepts</a>
+        <a href="#articles" @click="closeMenu">Nos articles</a>
+        <a href="#guide-michelin" @click="closeMenu">En savoir plus sur le Guide Michelin</a>
+        <a href="#about" @click="closeMenu">En savoir plus sur nous</a>
+        <a href="#partners" @click="closeMenu">Nos partenaires</a>
+      </nav>
+
+      <div class="menu-branding" aria-hidden="true">
+        <img src="/img/logo-favicon.png" alt="" class="menu-branding-logo" />
+        <p class="menu-branding-title">Guide MICHELIN</p>
+      </div>
       </div>
     </div>
   </header>
@@ -108,7 +108,7 @@
 <script setup>
 import { computed, ref } from 'vue';
 
-defineProps({
+const props = defineProps({
   isAuthenticated: {
     type: Boolean,
     default: false
@@ -125,6 +125,8 @@ const menuOpen = ref(false);
 const locationPending = ref(false);
 const locationCity = ref('');
 const locationCountry = ref('');
+const hasSessionUser = computed(() => props.isAuthenticated && Boolean(props.user));
+const displayName = computed(() => props.user?.fullName || props.user?.name || 'Utilisateur');
 
 const locationLabel = computed(() => {
   if (locationCity.value && locationCountry.value) {
@@ -140,6 +142,16 @@ function closeMenu() {
 function openAuthFromMenu() {
   closeMenu();
   emit('toggle-auth');
+}
+
+function openPrimaryMenuAction() {
+  if (hasSessionUser.value) {
+    closeMenu();
+    window.location.href = '/profil';
+    return;
+  }
+
+  openAuthFromMenu();
 }
 
 function logoutFromMenu() {

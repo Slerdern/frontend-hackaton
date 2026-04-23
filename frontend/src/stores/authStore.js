@@ -58,11 +58,13 @@ export const useAuthStore = defineStore('auth', () => {
       '';
 
     const fallbackFullName = payload?.fullName || payload?.name || '';
+    const preferences = apiUser.preferences || data?.preferences || payload?.preferences || null;
 
     return {
       email: apiUser.email || data?.email || payload?.email || '',
       id: apiUser.id || data?.user_id || data?.id || null,
-      fullName: apiFullName || fallbackFullName || null
+      fullName: apiFullName || fallbackFullName || null,
+      preferences
     };
   }
 

@@ -10,3 +10,13 @@ export async function searchWithAi(payload) {
   return data;
 }
 
+export async function getHotelWelcomeMessage() {
+  const { data } = await httpClient.get('/ai/hotels/welcome');
+  return data;
+}
+
+export async function searchHotelWithAi(payload) {
+  const { data } = await httpClient.post('/ai/hotels/search', payload);
+  return data;
+}
+
