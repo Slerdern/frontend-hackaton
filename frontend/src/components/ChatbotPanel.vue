@@ -1,30 +1,32 @@
 <template>
-  <aside class="side-panel" v-if="open">
-    <div class="panel-header">
-      <h3>Assistant Michelin</h3>
-      <button @click="$emit('close')">x</button>
-    </div>
+  <div v-if="open" class="side-panel-backdrop" @click.self="$emit('close')">
+    <aside class="side-panel">
+      <div class="panel-header">
+        <h3>Assistant Michelin</h3>
+        <button @click="$emit('close')">x</button>
+      </div>
 
-    <p class="hint" v-if="welcomeMessage">{{ welcomeMessage }}</p>
+      <p class="hint" v-if="welcomeMessage">{{ welcomeMessage }}</p>
 
-    <form class="stack" @submit.prevent="submitMessage">
-      <textarea
-        v-model="message"
-        placeholder="Ex: Je veux un sushi autour de Paris"
-        rows="3"
-        required
-      ></textarea>
-      <input v-model.number="latitude" type="number" step="0.0001" placeholder="Latitude" />
-      <input v-model.number="longitude" type="number" step="0.0001" placeholder="Longitude" />
-      <input v-model.number="radius" type="number" min="0" step="100" placeholder="Rayon (metres)" />
-      <button :disabled="loading" type="submit">{{ loading ? 'Recherche...' : 'Envoyer' }}</button>
-    </form>
+      <form class="stack" @submit.prevent="submitMessage">
+        <textarea
+          v-model="message"
+          placeholder="Ex: Je veux un sushi autour de Paris"
+          rows="3"
+          required
+        ></textarea>
+        <input v-model.number="latitude" type="number" step="0.0001" placeholder="Latitude" />
+        <input v-model.number="longitude" type="number" step="0.0001" placeholder="Longitude" />
+        <input v-model.number="radius" type="number" min="0" step="100" placeholder="Rayon (metres)" />
+        <button :disabled="loading" type="submit">{{ loading ? 'Recherche...' : 'Envoyer' }}</button>
+      </form>
 
-    <p class="hint" v-if="assistantMessage">{{ assistantMessage }}</p>
-    <ul class="followups" v-if="followUps.length">
-      <li v-for="item in followUps" :key="item">{{ item }}</li>
-    </ul>
-  </aside>
+      <p class="hint" v-if="assistantMessage">{{ assistantMessage }}</p>
+      <ul class="followups" v-if="followUps.length">
+        <li v-for="item in followUps" :key="item">{{ item }}</li>
+      </ul>
+    </aside>
+  </div>
 </template>
 
 <script setup>
@@ -63,4 +65,3 @@ function submitMessage() {
   });
 }
 </script>
-
