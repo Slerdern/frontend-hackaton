@@ -182,7 +182,7 @@ button {
 .hero-search-row {
   margin-top: 28px;
   display: grid;
-  grid-template-columns: 1fr 42px 42px;
+  grid-template-columns: 1fr 42px;
   gap: 8px;
   align-items: center;
 }
@@ -222,6 +222,61 @@ button {
   border-radius: 999px;
 }
 
+.chatbot-launcher {
+  position: fixed;
+  left: 16px;
+  bottom: 16px;
+  z-index: 60;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  background: transparent;
+  border-radius: 0;
+  border: 0;
+  box-shadow: none;
+  overflow: visible;
+}
+
+.chatbot-launcher img {
+  display: block;
+  width: 80px;
+  height: 80px;
+  transition: transform 180ms ease;
+}
+
+.chatbot-launcher-bubble {
+  position: absolute;
+  left: calc(100% + 10px);
+  top: 50%;
+  transform: translateY(-50%) translateX(-6px);
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: rgb(20 20 20 / 0.92);
+  color: #fff;
+  font-size: 16px;
+  font-weight: 700;
+  white-space: nowrap;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition:
+    opacity 180ms ease,
+    transform 180ms ease,
+    visibility 180ms ease;
+}
+
+.chatbot-launcher:hover img,
+.chatbot-launcher:focus-visible img {
+  transform: scale(1.08);
+}
+
+.chatbot-launcher:hover .chatbot-launcher-bubble,
+.chatbot-launcher:focus-visible .chatbot-launcher-bubble {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(-50%) translateX(0);
+}
 .hero-chips {
   margin-top: auto;
   display: flex;
@@ -979,7 +1034,7 @@ button {
   .hero-search-row {
     margin-top: 4px;
     max-width: 760px;
-    grid-template-columns: 1fr 52px 52px;
+    grid-template-columns: 1fr 52px;
   }
 
   .hero-search-row-fixed {
@@ -996,6 +1051,11 @@ button {
     width: 52px;
     height: 52px;
     font-size: 22px;
+  }
+
+  .chatbot-launcher {
+    left: 24px;
+    bottom: 24px;
   }
 
   .content-shell {
