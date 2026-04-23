@@ -22,9 +22,17 @@
       </form>
 
       <p class="hint" v-if="assistantMessage">{{ assistantMessage }}</p>
-      <ul class="followups" v-if="followUps.length">
-        <li v-for="item in followUps" :key="item">{{ item }}</li>
-      </ul>
+      <div class="chatbot-props">
+        <button
+          v-for="item in followUps"
+          :key="item"
+          type="button"
+          :disabled="loading"
+          @click="submitSuggestedMessage(item)"
+        >
+          {{ item }}
+        </button>
+      </div>
     </aside>
   </div>
 </template>
@@ -59,6 +67,16 @@ const radius = ref(3000);
 function submitMessage() {
   emit('send', {
     message: message.value,
+    latitude: latitude.value,
+    longitude: longitude.value,
+    radius: radius.value
+  });
+}
+
+function submitSuggestedMessage(item) {
+  message.value = item;
+  emit('send', {
+    message: item,
     latitude: latitude.value,
     longitude: longitude.value,
     radius: radius.value

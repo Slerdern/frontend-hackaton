@@ -253,6 +253,17 @@ button {
     width: 110px;
 }
 
+.chatbot-props button {
+  border-radius: 999px;
+  background: var(--brand-red);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 700;
+  font-family: Sansita, sans-serif;
+  height: 30px;
+  margin:10px;
+}
+
 .content-shell {
   max-width: 420px;
   margin: 0 auto;
