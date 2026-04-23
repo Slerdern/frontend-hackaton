@@ -79,10 +79,13 @@
     <AuthPanel
       :open="authOpen"
       :loading="authStore.loading"
+      :is-authenticated="authStore.isAuthenticated"
+      :user-email="authStore.user?.email || ''"
       :message="authMessage"
       @close="authOpen = false"
       @login="handleLogin"
       @signup="handleSignup"
+      @logout="handleLogout"
     />
 
     <ChatbotPanel
@@ -260,7 +263,7 @@ async function handleLogin(payload) {
   authMessage.value = '';
   try {
     await authStore.loginUser(payload);
-    authMessage.value = 'Connexion reussie';
+    authMessage.value = 'Connexion reussie.';
   } catch (error) {
     authMessage.value = readError(error);
   }
@@ -270,13 +273,27 @@ async function handleSignup(payload) {
   authMessage.value = '';
   try {
     await authStore.signupUser(payload);
-    authMessage.value = 'Inscription reussie';
+    authMessage.value = 'Inscription reussie.';
+  } catch (error) {
+    authMessage.value = readError(error);
+  }
+}
+
+async function handleLogout() {
+  authMessage.value = '';
+  try {
+    const result = await authStore.logoutUser();
+    authMessage.value = result?.message || 'Deconnexion reussie.';
   } catch (error) {
     authMessage.value = readError(error);
   }
 }
 
 function readError(error) {
+  if (error instanceof Error && error.message) {
+    return error.message;
+  }
+
   if (axios.isAxiosError(error)) {
     return error.response?.data?.message || error.response?.data?.error || 'Erreur API';
   }

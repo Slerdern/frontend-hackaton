@@ -20,7 +20,7 @@ Interface Vue 3 (Vite) mobile-first connectee au backend Spring Boot du projet, 
 
 ## Lancer en local
 
-Prerequis verifies seulement au niveau projet: backend configure sur `http://localhost:8000`.
+Prerequis: backend accessible (Render par defaut, ou backend local si `VITE_API_BASE_URL` est configuree).
 
 ```bash
 cd frontend
@@ -30,7 +30,9 @@ npm run dev
 
 Frontend: `http://localhost:5173`
 
-Le proxy Vite redirige `/api/*` vers `http://127.0.0.1:8000/*`.
+Par defaut, le frontend cible le backend Render `https://guide-michelin.onrender.com`.
+
+Pour surcharger l'endpoint API, definir la variable `VITE_API_BASE_URL`.
 
 ## Verification rapide
 
