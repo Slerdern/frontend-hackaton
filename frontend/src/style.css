@@ -882,6 +882,24 @@ button {
   font-size: 12px;
 }
 
+.toast-bubble {
+  position: fixed;
+  left: 50%;
+  bottom: 24px;
+  transform: translateX(-50%);
+  z-index: 120;
+  min-width: 220px;
+  max-width: min(90vw, 360px);
+  padding: 12px 18px;
+  border-radius: 999px;
+  background: rgb(20 20 20 / 0.92);
+  color: #fff;
+  text-align: center;
+  font-family: Sansita, sans-serif;
+  font-size: 14px;
+  box-shadow: 0 14px 28px rgb(0 0 0 / 0.2);
+}
+
 @media (width >= 900px) {
   .main-nav,
   .hero,

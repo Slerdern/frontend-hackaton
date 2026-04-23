@@ -145,11 +145,15 @@
       @close="chatOpen = false"
       @send="runAiSearch"
     />
+
+    <div v-if="toastMessage" class="toast-bubble" role="status" aria-live="polite">
+      {{ toastMessage }}
+    </div>
   </main>
 </template>
 
 <script setup>
-import { onMounted, reactive, ref } from 'vue';
+import { onBeforeUnmount, onMounted, reactive, ref } from 'vue';
 import axios from 'axios';
 
 import AppFooter from '../components/AppFooter.vue';
@@ -172,6 +176,9 @@ const welcomeMessage = ref('');
 const assistantMessage = ref('');
 const chatLoading = ref(false);
 const followUps = ref([]);
+const toastMessage = ref('');
+
+let toastTimeoutId = null;
 
 const sections = reactive({
   experts: [],
@@ -327,7 +334,8 @@ async function handleLogin(payload) {
   authMessage.value = '';
   try {
     await authStore.loginUser(payload);
-    authMessage.value = 'connexion réussie.';
+    authOpen.value = false;
+    showToast('Connexion réussie');
   } catch (error) {
     authMessage.value = readError(error);
   }
@@ -364,7 +372,26 @@ function readError(error) {
   return 'Une erreur est survenue';
 }
 
+function showToast(message) {
+  toastMessage.value = message;
+
+  if (toastTimeoutId) {
+    window.clearTimeout(toastTimeoutId);
+  }
+
+  toastTimeoutId = window.setTimeout(() => {
+    toastMessage.value = '';
+    toastTimeoutId = null;
+  }, 2000);
+}
+
 onMounted(() => {
   loadInitialFeed();
+});
+
+onBeforeUnmount(() => {
+  if (toastTimeoutId) {
+    window.clearTimeout(toastTimeoutId);
+  }
 });
 </script>
