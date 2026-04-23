@@ -177,7 +177,13 @@ button {
     font-size: 16px;
     width: 100px;
     color: #c5a24c;
+    box-shadow: #b99a4f 2px 2px;
 }
+
+  .map-badge svg{
+    height: 18px;
+    width: 18px;
+  }
 
 .hero-search-row {
   margin-top: 28px;
@@ -356,7 +362,7 @@ button {
   width: 100%;
   height: 100%;
   display: block;
-  fill: currentColor;
+  fill: currentcolor;
 }
 
 .restaurant-card-footer strong,
@@ -429,7 +435,7 @@ button {
 .article-tag svg {
   width: 23px;
   height: 23px;
-  fill: currentColor;
+  fill: currentcolor;
   flex: 0 0 auto;
 }
 
@@ -636,7 +642,7 @@ button {
   font-family: Sansita, sans-serif;
 }
 
-@media (min-width: 720px) {
+@media (width >= 720px) {
   .content-shell,
   .hero,
   .main-nav,
@@ -688,6 +694,8 @@ button {
   right: 0;
   left: auto;
   width: min(360px, 100vw);
+  display: flex;
+  flex-direction: column;
 }
 
 .menu-close-btn {
@@ -792,6 +800,29 @@ button {
 .menu-links {
   display: grid;
   gap: 8px;
+}
+
+.menu-branding {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding-top: 18px;
+  height: 100%;
+}
+
+.menu-branding-logo {
+  width: 60px;
+  height: 60px;
+}
+
+.menu-branding-title {
+  margin: 8px 0 0;
+  font-family: Sansita, sans-serif;
+  font-weight: 800;
+  font-size: 20px;
+  letter-spacing: 0.4px;
+  color: #2c2823;
 }
 
 .menu-links a {
@@ -943,8 +974,20 @@ button {
 
   .hero-overlay h1 {
     width: calc(100% - 140px);
-    font-size: 48px;
+    font-size: 40px;
     max-width: 760px;
+    padding-bottom: 30px;
+  }
+
+  .map-badge{
+    width: 132px;
+    font-size: 20px;
+    height: 35px;
+  }
+
+  .map-badge svg{
+    height: 24px;
+    width: 24px;
   }
 
   .hero-search-row {
@@ -961,6 +1004,16 @@ button {
   .hero-search-row input {
     height: 52px;
     font-size: 15px;
+  }
+
+  .hero-chips {
+    justify-content: space-around;
+  }
+
+  .hero-chips button {
+    width: 12rem;
+    height: 2.5rem;
+    font-size: 18px;
   }
 
   .circle-action {
