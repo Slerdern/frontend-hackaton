@@ -35,10 +35,31 @@
         <h2 class="section-title">Nos derniers articles</h2>
         <div class="article-grid">
           <article v-for="article in articles" :key="article.title" class="article-card">
-            <img :src="article.image" :alt="article.title" />
+            <div class="article-card-gallery">
+              <img v-for="image in article.images" :key="image" :src="image" :alt="article.title" />
+            </div>
             <div class="article-copy">
               <h3>{{ article.title }}</h3>
-              <p>{{ article.meta }}</p>
+              <div class="article-meta">
+                <span class="article-meta-item">
+                  <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M12 7a1 1 0 0 1 1 1v3.59l2.7 2.7a1 1 0 1 1-1.4 1.42l-3-3A1 1 0 0 1 11 12V8a1 1 0 0 1 1-1Zm0-5a10 10 0 1 1 0 20 10 10 0 0 1 0-20Zm0 2a8 8 0 1 0 0 16 8 8 0 0 0 0-16Z" />
+                  </svg>
+                  {{ article.readTime }}
+                </span>
+                <span class="article-meta-item">
+                  <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M7 2a1 1 0 0 1 1 1v1h8V3a1 1 0 1 1 2 0v1h1a3 3 0 0 1 3 3v11a3 3 0 0 1-3 3H5a3 3 0 0 1-3-3V7a3 3 0 0 1 3-3h1V3a1 1 0 0 1 1-1Zm13 8H4v8a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-8ZM5 6a1 1 0 0 0-1 1v1h16V7a1 1 0 0 0-1-1H5Z" />
+                  </svg>
+                  {{ article.date }}
+                </span>
+                <span class="article-tag">
+                  <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M10 3a2 2 0 0 1 1.41.59l8 8a2 2 0 0 1 0 2.82l-5.59 5.59a2 2 0 0 1-2.82 0l-8-8A2 2 0 0 1 2.41 10L3 4a2 2 0 0 1 1.76-1.76L10 2.41V3Zm-4.59 8.59 7 7L18 13l-7-7-4.59.59-.59 4.59ZM8.5 8A1.5 1.5 0 1 0 8.5 5a1.5 1.5 0 0 0 0 3Z" />
+                  </svg>
+                  {{ article.tag }}
+                </span>
+              </div>
             </div>
           </article>
         </div>
@@ -48,10 +69,31 @@
         <h2 class="section-title">En savoir plus sur le Guide MICHELIN</h2>
         <div class="article-grid">
           <article v-for="item in infoCards" :key="item.title" class="article-card">
-            <img :src="item.image" :alt="item.title" />
+            <div class="article-card-gallery">
+              <img v-for="image in item.images" :key="image" :src="image" :alt="item.title" />
+            </div>
             <div class="article-copy">
               <h3>{{ item.title }}</h3>
-              <p>{{ item.meta }}</p>
+              <div class="article-meta">
+                <span class="article-meta-item">
+                  <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M12 7a1 1 0 0 1 1 1v3.59l2.7 2.7a1 1 0 1 1-1.4 1.42l-3-3A1 1 0 0 1 11 12V8a1 1 0 0 1 1-1Zm0-5a10 10 0 1 1 0 20 10 10 0 0 1 0-20Zm0 2a8 8 0 1 0 0 16 8 8 0 0 0 0-16Z" />
+                  </svg>
+                  {{ item.readTime }}
+                </span>
+                <span class="article-meta-item">
+                  <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M7 2a1 1 0 0 1 1 1v1h8V3a1 1 0 1 1 2 0v1h1a3 3 0 0 1 3 3v11a3 3 0 0 1-3 3H5a3 3 0 0 1-3-3V7a3 3 0 0 1 3-3h1V3a1 1 0 0 1 1-1Zm13 8H4v8a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-8ZM5 6a1 1 0 0 0-1 1v1h16V7a1 1 0 0 0-1-1H5Z" />
+                  </svg>
+                  {{ item.date }}
+                </span>
+                <span class="article-tag">
+                  <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M10 3a2 2 0 0 1 1.41.59l8 8a2 2 0 0 1 0 2.82l-5.59 5.59a2 2 0 0 1-2.82 0l-8-8A2 2 0 0 1 2.41 10L3 4a2 2 0 0 1 1.76-1.76L10 2.41V3Zm-4.59 8.59 7 7L18 13l-7-7-4.59.59-.59 4.59ZM8.5 8A1.5 1.5 0 1 0 8.5 5a1.5 1.5 0 0 0 0 3Z" />
+                  </svg>
+                  {{ item.tag }}
+                </span>
+              </div>
             </div>
           </article>
         </div>
@@ -161,30 +203,46 @@ const concepts = [
 const articles = [
   {
     title: 'Tour du monde des restaurants les plus originaux de la selection',
-    meta: '5 min | 17 avril 2026',
-    image:
-      'https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=500&q=80'
+    readTime: '7 min',
+    date: '17 avril 2026',
+    tag: 'VOYAGE',
+    images: [
+      'https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=700&q=80',
+      'https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=700&q=80'
+    ]
   },
   {
     title: 'La liste complete des restaurants du Guide MICHELIN 2026',
-    meta: '3 min | 19 mars 2026',
-    image:
-      'https://images.unsplash.com/photo-1466978913421-dad2ebd01d17?auto=format&fit=crop&w=500&q=80'
+    readTime: '16 min',
+    date: '16 mars 2026',
+    tag: 'ACTU',
+    images: [
+      'https://images.unsplash.com/photo-1466978913421-dad2ebd01d17?auto=format&fit=crop&w=700&q=80',
+      'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=700&q=80'
+    ]
   }
 ];
 
 const infoCards = [
   {
     title: 'Tour du monde des restaurants les plus originaux de la selection',
-    meta: '5 min | 28 novembre 2025',
-    image:
-      'https://images.unsplash.com/photo-1552566626-52f8b828add9?auto=format&fit=crop&w=500&q=80'
+    readTime: '5 min',
+    date: '28 novembre 2025',
+    tag: 'GUIDE',
+    images: [
+      'https://images.unsplash.com/photo-1552566626-52f8b828add9?auto=format&fit=crop&w=700&q=80',
+      'https://images.unsplash.com/photo-1455390582262-044cdead277a?auto=format&fit=crop&w=700&q=80'
+    ]
   },
   {
     title: 'La Clef MICHELIN : le dernier palmares',
-    meta: '4 min | 18 septembre 2025',
-    image:
-      'https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=500&q=80'
+    readTime: '4 min',
+    date: '18 septembre 2025',
+    tag: 'HOTELS',
+    images: [
+      'https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=700&q=80',
+      'https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?auto=format&fit=crop&w=700&q=80'
+    ]
   }
 ];
 
@@ -310,4 +368,3 @@ onMounted(() => {
   loadInitialFeed();
 });
 </script>
-
