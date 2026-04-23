@@ -10,7 +10,12 @@
       </div>
 
       <div class="hero-search-shell" :style="{ height: isSearchPinned ? `${searchRowHeight}px` : 'auto' }">
-        <div ref="searchRowRef" class="hero-search-row" :class="{ 'hero-search-row-fixed': isSearchPinned }">
+        <form
+          ref="searchRowRef"
+          class="hero-search-row"
+          :class="{ 'hero-search-row-fixed': isSearchPinned }"
+          @submit.prevent="$emit('do-search')"
+        >
           <input
             :value="query"
             @input="$emit('update:query', $event.target.value)"
@@ -24,7 +29,7 @@
 <path d="M15.1111 0H0.888889C0.4 0 0 0.405018 0 0.900041V2.70012C0 2.91613 0.08 3.13214 0.222222 3.29415L1.73984 5.05164C4.6313 8.40009 6.22222 12.6767 6.22222 17.1008C6.22222 17.4608 6.43556 17.7938 6.77333 17.9288C6.9351 17.9983 7.11366 18.0175 7.28623 17.9838C7.45879 17.9502 7.61754 17.8652 7.74222 17.7398L9.52 15.9397C9.60238 15.8556 9.66756 15.7559 9.7118 15.6462C9.75603 15.5366 9.77845 15.4191 9.77778 15.3007C9.77778 12.0378 10.9511 8.88365 13.0837 6.41406L15.7778 3.29415C15.92 3.13214 16 2.91613 16 2.70012V0.900041C16 0.405018 15.6 0 15.1111 0Z" fill="white"/>
 </svg>
 </button>
-        </div>
+        </form>
       </div>
 
       <div class="hero-chips">

@@ -154,6 +154,7 @@
 
 <script setup>
 import { onBeforeUnmount, onMounted, reactive, ref } from 'vue';
+import { useRouter } from 'vue-router';
 import axios from 'axios';
 
 import AppFooter from '../components/AppFooter.vue';
@@ -163,10 +164,12 @@ import ChatbotPanel from '../components/ChatbotPanel.vue';
 import HeroSection from '../components/HeroSection.vue';
 import NavBar from '../components/NavBar.vue';
 import { getWelcomeMessage, searchWithAi } from '../services/aiService';
+import { getHotelsHomeFeed } from '../services/hotelService';
 import { searchRestaurants } from '../services/restaurantService';
 import { useAuthStore } from '../stores/authStore';
 
 const authStore = useAuthStore();
+const router = useRouter();
 
 const query = ref('');
 const authOpen = ref(false);
@@ -262,33 +265,103 @@ const partners = [
 
 function splitForSections(restaurants) {
   sections.experts = restaurants.slice(0, 2);
-  sections.latest = restaurants.slice(2, 4);
-  sections.stays = restaurants.slice(4, 6);
+  sections.latest = restaurants.slice(0, 3);
+}
+
+function toHotelPrice(avgAdr) {
+  if (typeof avgAdr !== 'number') {
+    return '€€€';
+  }
+
+  if (avgAdr < 90) {
+    return '€';
+  }
+
+  if (avgAdr < 180) {
+    return '€€';
+  }
+
+  if (avgAdr < 320) {
+    return '€€€';
+  }
+
+  return '€€€€';
+}
+
+function mapHotelsToCards(hotels) {
+  return (hotels || []).map((hotel) => ({
+    id: hotel.id,
+    name: hotel.name,
+    location: hotel.country || 'Lieu non renseigne',
+    cuisine: hotel.marketSegment || 'Hebergement',
+    price: toHotelPrice(hotel.avgAdr),
+    photoUrl: hotel.photoUrl
+  }));
+}
+
+function splitUnifiedResults(restaurants, hotels) {
+  splitForSections(restaurants || []);
+  sections.stays = (hotels || []).slice(0, 3);
+}
+
+function buildUnifiedSearchPayload(searchText) {
+  const trimmed = searchText?.trim();
+  const baseSort = {
+    limit: 6,
+    sortBy: 'score',
+    sortDirection: 'desc'
+  };
+
+  return {
+    restaurantPayload: {
+      latitude: 48.8566,
+      longitude: 2.3522,
+      radius: 3000,
+      ...baseSort,
+      ...(trimmed
+        ? {
+            name: trimmed,
+            location: trimmed
+          }
+        : {})
+    },
+    hotelPayload: {
+      ...baseSort,
+      ...(trimmed
+        ? {
+            name: trimmed,
+            country: trimmed
+          }
+        : {})
+    }
+  };
 }
 
 async function loadInitialFeed() {
+  const { restaurantPayload } = buildUnifiedSearchPayload('');
+
   try {
-    const results = await searchRestaurants({ latitude: 48.8566, longitude: 2.3522, radius: 3000, limit: 6 });
-    splitForSections(results || []);
+    const [restaurantsResult, hotelsResult] = await Promise.allSettled([
+      searchRestaurants(restaurantPayload),
+      getHotelsHomeFeed({ limit: 6, offset: 0 })
+    ]);
+
+    const restaurants = restaurantsResult.status === 'fulfilled' ? restaurantsResult.value || [] : [];
+    const hotels = hotelsResult.status === 'fulfilled' ? mapHotelsToCards(hotelsResult.value || []) : [];
+
+    splitUnifiedResults(restaurants, hotels);
   } catch (error) {
     console.error('Erreur chargement feed', error);
   }
 }
 
 async function runClassicSearch() {
-  try {
-    const payload = {
-      latitude: 48.8566,
-      longitude: 2.3522,
-      radius: 3000,
-      name: query.value || undefined,
-      limit: 6
-    };
-    const results = await searchRestaurants(payload);
-    splitForSections(results || []);
-  } catch (error) {
-    authMessage.value = readError(error);
-  }
+  await router.push({
+    name: 'search-results',
+    query: {
+      q: query.value?.trim() || ''
+    }
+  });
 }
 
 function toggleAuth() {
@@ -322,7 +395,7 @@ async function runAiSearch(payload) {
     const response = await searchWithAi(payload);
     assistantMessage.value = response.assistantMessage || response.intentSummary || '';
     followUps.value = response.suggestedFollowUps || [];
-    splitForSections(response.restaurants || []);
+    splitUnifiedResults(response.restaurants || [], sections.stays);
   } catch (error) {
     assistantMessage.value = readError(error);
   } finally {
