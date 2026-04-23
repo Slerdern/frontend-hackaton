@@ -49,9 +49,34 @@
         </button>
       </div>
 
-      <button class="account-btn menu-account-btn" @click="openAuthFromMenu">
-        {{ isAuthenticated ? 'Mon compte' : 'Inscription / Connexion' }}
+      <button 
+        v-if="!isAuthenticated" 
+        class="account-btn menu-account-btn" 
+        @click="openAuthFromMenu"
+      >
+        Inscription / Connexion
       </button>
+
+      <!-- CONNECTÉ -->
+      <div v-else class="account-container">
+        <div class="account-dropdown account-btn">
+          <div>
+            <img
+              :src="user?.avatar || '/img/default-profile-picture.png'"
+              alt="Photo de profil"
+            />
+          </div>
+          <div class="panel-user-infos">
+            <p> Nom : {{ user.name }}</p>
+            <p> Mail : {{ user.email }}</p>
+          </div>
+          <div class="user-navigation-btn">
+            
+            <a href="/profil" @click="closeMenu">Profil</a>
+            <button type="button" class="logout-btn" @click="logoutFromMenu">Déconnexion</button>
+          </div>
+        </div>
+      </div>
 
       <button class="menu-location-btn" type="button" @click="activateLocation" :disabled="locationPending" :aria-busy="locationPending">
         <span>{{ locationPending ? 'Localisation en cours...' : locationLabel }}</span>
@@ -81,10 +106,14 @@ defineProps({
   isAuthenticated: {
     type: Boolean,
     default: false
+  },
+  user: {
+    type: Object,
+    default: null
   }
 });
 
-const emit = defineEmits(['toggle-auth', 'toggle-chat']);
+const emit = defineEmits(['toggle-auth', 'toggle-chat', 'logout']);
 
 const menuOpen = ref(false);
 const locationPending = ref(false);
@@ -105,6 +134,11 @@ function closeMenu() {
 function openAuthFromMenu() {
   closeMenu();
   emit('toggle-auth');
+}
+
+function logoutFromMenu() {
+  emit('logout');
+  closeMenu();
 }
 
 function getCurrentPosition() {

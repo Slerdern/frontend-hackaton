@@ -583,6 +583,58 @@ button {
   place-items: center;
 }
 
+.account-dropdown {
+    border: #c5a24c 1px solid;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    padding: 6px 12px;
+    background-color: #d4cab8;
+    width: 100%;
+    margin: 10px 0;
+    color: white;
+}
+
+.account-dropdown img {
+    margin-top: 10px;
+    height: 70px;
+    width: auto;
+    background-color: #fff;
+    border-radius: 60%;
+}
+
+.user-navigation-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 10px 0;
+}
+
+.user-navigation-btn * {
+  background-color: #b90f31;
+  color: #fff;
+  padding: 7px 15px;
+  border-radius: 5px;
+  text-decoration: none;
+  gap: 10px;
+}
+
+.panel-user-infos *{
+  color: #000;
+}
+
+.logout-btn{
+  background-color: white;
+  color: #b90f31;
+  border: 1px solid;
+}
+
+
+
 .menu-account-btn,
 .menu-location-btn {
   width: 100%;
@@ -753,6 +805,10 @@ button {
     min-width: 280px;
     min-height: 44px;
     font-size: 13px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
   }
 
   .hero {

@@ -1,6 +1,12 @@
 <template>
   <main id="top" class="home-page">
-    <NavBar :is-authenticated="authStore.isAuthenticated" @toggle-auth="toggleAuth" @toggle-chat="toggleChat" />
+    <NavBar
+      :is-authenticated="authStore.isAuthenticated"
+      :user="authStore.user"
+      @toggle-auth="toggleAuth"
+      @toggle-chat="toggleChat"
+      @logout="handleLogout"
+    />
 
     <HeroSection
       :query="query"

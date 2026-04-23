@@ -46,6 +46,26 @@ export const useAuthStore = defineStore('auth', () => {
     }
   }
 
+  function buildUserFromAuthData(data, payload = {}) {
+    const apiUser = data?.user || {};
+    const apiFullName =
+      apiUser.fullName ||
+      apiUser.full_name ||
+      apiUser.name ||
+      data?.fullName ||
+      data?.full_name ||
+      data?.name ||
+      '';
+
+    const fallbackFullName = payload?.fullName || payload?.name || '';
+
+    return {
+      email: apiUser.email || data?.email || payload?.email || '',
+      id: apiUser.id || data?.user_id || data?.id || null,
+      fullName: apiFullName || fallbackFullName || null
+    };
+  }
+
   async function signupUser(payload) {
     loading.value = true;
     try {
@@ -53,10 +73,7 @@ export const useAuthStore = defineStore('auth', () => {
       if (data.access_token) {
         persistToken(data.access_token);
       }
-      const nextUser = {
-        email: data.email || data.user?.email || payload.email,
-        id: data.user_id || null
-      };
+      const nextUser = buildUserFromAuthData(data, payload);
       persistUser(nextUser);
       return data;
     } finally {
@@ -72,10 +89,7 @@ export const useAuthStore = defineStore('auth', () => {
         throw new Error('Token de session manquant.');
       }
       persistToken(data.access_token);
-      const nextUser = data.user || {
-        email: data.email || payload.email,
-        id: data.user_id || null
-      };
+      const nextUser = buildUserFromAuthData(data, payload);
       persistUser(nextUser);
       return data;
     } finally {

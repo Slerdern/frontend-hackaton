@@ -3,6 +3,7 @@
     <h1>Mon profil</h1>
     <section v-if="user">
       <ul class="profile-list">
+        <li v-if="user.fullName"><strong>Nom :</strong> {{ user.fullName }}</li>
         <li><strong>Email :</strong> {{ user.email }}</li>
         <li v-if="user.id"><strong>ID :</strong> {{ user.id }}</li>
       </ul>
