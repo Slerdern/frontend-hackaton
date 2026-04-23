@@ -367,6 +367,12 @@ button {
   color: inherit;
 }
 
+.restaurant-card-link {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+}
+
 .restaurant-card img {
   height: 230px;
 }
@@ -394,29 +400,6 @@ button {
   background: #fff;
 }
 
-.card-brand-row {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.55rem;
-}
-
-.card-brand-logo {
-  width: 28px;
-  height: 28px;
-  border-radius: 999px;
-  background: #fff;
-  border: 1px solid #ece4d9;
-  padding: 3px;
-  object-fit: contain;
-}
-
-.card-brand-label {
-  color: var(--brand-red);
-  font-size: 0.68rem;
-  letter-spacing: 0.1em;
-  font-weight: 800;
-  text-transform: uppercase;
-}
 
 .restaurant-card-footer strong,
 .article-copy h3 {

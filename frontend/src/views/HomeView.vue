@@ -609,7 +609,22 @@ function mapHotelsToCards(hotels) {
     location: hotel.country || 'Lieu non renseigne',
     cuisine: hotel.marketSegment || 'Hebergement',
     price: toHotelPrice(hotel.avgAdr),
-    photoUrl: toAbsoluteImageUrl(hotel.photoUrl, hotel.name)
+    photoUrl: toAbsoluteImageUrl(hotel.photoUrl, hotel.name),
+    websiteUrl:
+      hotel.websiteUrl ||
+      hotel.website_url ||
+      hotel.website ||
+      hotel.url ||
+      hotel.link ||
+      hotel.michelinUrl ||
+      hotel.michelin_url ||
+      hotel.reservationUrl ||
+      hotel.reservation_url ||
+      hotel.links?.website ||
+      hotel.links?.michelin ||
+      hotel.links?.reservation ||
+      hotel.contact?.website ||
+      ''
   }));
 }
 

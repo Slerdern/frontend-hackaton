@@ -1,21 +1,25 @@
 <template>
-  <article class="restaurant-card">
-    <a
-      v-if="destinationUrl"
-      class="image-link"
-      :href="destinationUrl"
-      target="_blank"
-      rel="noopener noreferrer"
-      :aria-label="`Voir ${displayName} sur son site`"
-    >
-      <img :src="imageSrc" :alt="restaurant.name" @error="handleImageError" />
-    </a>
-    <img v-else :src="imageSrc" :alt="restaurant.name" @error="handleImageError" />
+  <a
+    v-if="destinationUrl"
+    class="restaurant-card restaurant-card-link"
+    :href="destinationUrl"
+    target="_blank"
+    rel="noopener noreferrer"
+    :aria-label="`Voir ${displayName} sur son site`"
+  >
+    <img :src="imageSrc" :alt="restaurant.name" @error="handleImageError" />
     <div class="restaurant-card-footer">
-      <div class="card-brand-row" aria-hidden="true">
-        <img class="card-brand-logo" :src="brandLogoSrc" alt="" />
-        <span class="card-brand-label">Guide MICHELIN</span>
-      </div>
+      <strong>{{ displayName }}</strong>
+      <p class="card-detail">{{ locationLabel }}</p>
+      <p class="card-detail card-detail--muted">{{ metadataLabel }}</p>
+    </div>
+  </a>
+
+  <article v-else class="restaurant-card">
+    <div class="image-link">
+      <img :src="imageSrc" :alt="restaurant.name" @error="handleImageError" />
+    </div>
+    <div class="restaurant-card-footer">
       <strong>{{ displayName }}</strong>
       <p class="card-detail">{{ locationLabel }}</p>
       <p class="card-detail card-detail--muted">{{ metadataLabel }}</p>
@@ -37,7 +41,84 @@ const props = defineProps({
 
 const displayName = computed(() => props.restaurant.name || 'Restaurant');
 const imageSrc = ref(toAbsoluteImageUrl(props.restaurant.photoUrl, props.restaurant.name));
-const brandLogoSrc = computed(() => props.restaurant.logoUrl || props.restaurant.logo || '/img/logo-favicon.png');
+
+const frenchCityToRegion = {
+  paris: 'ile-de-france',
+  lyon: 'auvergne-rhone-alpes',
+  marseille: 'provence-alpes-cote-d-azur',
+  nice: 'provence-alpes-cote-d-azur',
+  bordeaux: 'nouvelle-aquitaine',
+  lille: 'hauts-de-france',
+  nantes: 'pays-de-la-loire',
+  strasbourg: 'grand-est',
+  toulouse: 'occitanie',
+  metz: 'grand-est',
+  bayonne: 'nouvelle-aquitaine',
+  cassis: 'provence-alpes-cote-d-azur',
+  'mont-de-marsan': 'nouvelle-aquitaine'
+};
+
+function normalizeText(value) {
+  return (value || '')
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .trim()
+    .toLowerCase();
+}
+
+function toSlug(value) {
+  return normalizeText(value)
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+}
+
+function readCityAndCountry() {
+  const explicitCountry = props.restaurant.country || '';
+  const location = props.restaurant.location || '';
+
+  if (location.includes(',')) {
+    const [cityPart, countryPart] = location.split(',');
+    return {
+      city: cityPart?.trim() || '',
+      country: countryPart?.trim() || explicitCountry
+    };
+  }
+
+  return {
+    city: location.trim(),
+    country: explicitCountry
+  };
+}
+
+function buildMichelinRestaurantUrl() {
+  const { city, country } = readCityAndCountry();
+  const normalizedCountry = normalizeText(country);
+
+  if (normalizedCountry !== 'france') {
+    return '';
+  }
+
+  const citySlug = toSlug(city);
+  const regionSlug = frenchCityToRegion[citySlug];
+  const restaurantSlug = toSlug(props.restaurant.name || '');
+
+  if (!citySlug || !regionSlug || !restaurantSlug) {
+    return '';
+  }
+
+  return `https://guide.michelin.com/fr/fr/${regionSlug}/${citySlug}/restaurant/${restaurantSlug}`;
+}
+
+function buildMichelinFallbackUrl() {
+  const canonicalRestaurantUrl = buildMichelinRestaurantUrl();
+  if (canonicalRestaurantUrl) {
+    return canonicalRestaurantUrl;
+  }
+
+  const query = `${props.restaurant.name || ''} ${props.restaurant.location || props.restaurant.country || ''}`.trim();
+  return query ? `https://guide.michelin.com/fr/fr/search?q=${encodeURIComponent(query)}` : '';
+}
+
 const destinationUrl = computed(() => {
   const rawUrl =
     props.restaurant.websiteUrl ||
@@ -55,7 +136,7 @@ const destinationUrl = computed(() => {
     props.restaurant.contact?.website ||
     '';
 
-  return toSafeExternalLink(rawUrl);
+  return toSafeExternalLink(rawUrl) || buildMichelinFallbackUrl();
 });
 const locationLabel = computed(() => props.restaurant.location || 'Ville non renseignee');
 const metadataLabel = computed(() => {
