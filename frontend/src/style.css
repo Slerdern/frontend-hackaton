@@ -326,6 +326,12 @@ button {
   object-fit: cover;
 }
 
+.image-link {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+}
+
 .restaurant-card img {
   height: 230px;
 }

@@ -63,3 +63,32 @@ export function toAbsoluteImageUrl(source, fallbackName = 'Restaurant') {
   return `${API_BASE_URL}/${value}`;
 }
 
+export function toSafeExternalLink(value) {
+  if (typeof value !== 'string') {
+    return '';
+  }
+
+  const trimmed = value.trim();
+  if (!trimmed) {
+    return '';
+  }
+
+  if (/^https?:\/\//i.test(trimmed)) {
+    return trimmed;
+  }
+
+  if (/^\/[\w\-./?=#%&+~:]*$/i.test(trimmed)) {
+    return `https://guide.michelin.com${trimmed}`;
+  }
+
+  if (/^[a-z]{2}\/[\w\-./?=#%&+~:]*$/i.test(trimmed)) {
+    return `https://guide.michelin.com/${trimmed}`;
+  }
+
+  if (/^[\w.-]+\.[a-z]{2,}(?:\/.*)?$/i.test(trimmed)) {
+    return `https://${trimmed}`;
+  }
+
+  return '';
+}
+
