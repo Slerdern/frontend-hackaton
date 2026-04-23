@@ -1,17 +1,19 @@
 <template>
-  <aside class="side-panel" v-if="open">
+  <div v-if="open" class="side-panel-backdrop" @click.self="$emit('close')">
+    <aside class="side-panel" v-if="open">
     <div class="panel-header">
       <h3>Inscription / Connexion</h3>
       <button @click="$emit('close')">x</button>
     </div>
 
-
     <div class="auth-status">
       <template v-if="isAuthenticated">
+        <div v-if="open" class="side-panel-backdrop" @click.self="$emit('close')">
         <p class="hint">Connecté{{ userEmail ? ` : ${userEmail}` : '' }}</p>
         <button :disabled="loading" type="button" @click="emit('logout')">
           {{ loading ? 'Chargement...' : 'Se déconnecter' }}
         </button>
+        </div>
       </template>
       <template v-else>
         <p class="hint">Vous n'êtes pas connecté.</p>
@@ -52,6 +54,7 @@
 
     <p class="hint" v-if="message">{{ message }}</p>
   </aside>
+  </div>
 </template>
 
 <script setup>

@@ -26,7 +26,7 @@
           <path d="M11 13.5C11.3978 13.5 11.7794 13.342 12.0607 13.0607C12.342 12.7794 12.5 12.3978 12.5 12C12.5 11.6022 12.342 11.2206 12.0607 10.9393C11.7794 10.658 11.3978 10.5 11 10.5C10.6022 10.5 10.2206 10.658 9.93934 10.9393C9.65804 11.2206 9.5 11.6022 9.5 12C9.5 12.3978 9.65804 12.7794 9.93934 13.0607C10.2206 13.342 10.6022 13.5 11 13.5Z" fill="black" stroke="#C30039" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
       </button>
-      <template v-if="isAuthenticated">
+      <template v-if="hasSessionUser">
         <a class="account-btn" :class="{ 'nav-action-hidden': menuOpen }" href="/profil">Mon profil</a>
       </template>
       <template v-else>
@@ -49,31 +49,31 @@
             </svg>
           </button>
         </div>
+      <button
+        v-if="!hasSessionUser"
+        class="account-btn menu-account-btn"
+        @click="openAuthFromMenu"
+      >
+        Inscription / Connexion
+      </button>
 
-        <button 
-          v-if="!isAuthenticated" 
-          class="account-btn menu-account-btn" 
-          @click="openAuthFromMenu"
-        >
-          Inscription / Connexion
-        </button>
+      <!-- CONNECTÉ -->
+      <div v-else class="account-container">
+        <div class="account-dropdown account-btn">
+          <div>
+            <img
+              :src="user?.avatar || '/img/default-profile-picture.png'"
+              alt="Photo de profil"
+            />
+          </div>
+          <div class="panel-user-infos">
+            <p>Nom : {{ displayName }}</p>
+            <p>Mail : {{ user?.email || '' }}</p>
+          </div>
+          <div class="user-navigation-btn">
 
-        <div v-else class="account-container">
-          <div class="account-dropdown account-btn">
-            <div>
-              <img
-                :src="user?.avatar || '/img/default-profile-picture.png'"
-                alt="Photo de profil"
-              />
-            </div>
-            <div class="panel-user-infos">
-              <p> Nom : {{ user.fullName || user.name || '-' }}</p>
-              <p> Mail : {{ user.email }}</p>
-            </div>
-            <div class="user-navigation-btn">
-              <a href="/profil" @click="closeMenu">Profil</a>
-              <button type="button" class="logout-btn" @click="logoutFromMenu">Déconnexion</button>
-            </div>
+            <a href="/profil" @click="closeMenu">Profil</a>
+            <button type="button" class="logout-btn" @click="logoutFromMenu">Déconnexion</button>
           </div>
         </div>
 
@@ -107,7 +107,7 @@
 <script setup>
 import { computed, ref } from 'vue';
 
-defineProps({
+const props = defineProps({
   isAuthenticated: {
     type: Boolean,
     default: false
@@ -124,6 +124,8 @@ const menuOpen = ref(false);
 const locationPending = ref(false);
 const locationCity = ref('');
 const locationCountry = ref('');
+const hasSessionUser = computed(() => props.isAuthenticated && Boolean(props.user));
+const displayName = computed(() => props.user?.fullName || props.user?.name || 'Utilisateur');
 
 const locationLabel = computed(() => {
   if (locationCity.value && locationCountry.value) {
@@ -139,6 +141,16 @@ function closeMenu() {
 function openAuthFromMenu() {
   closeMenu();
   emit('toggle-auth');
+}
+
+function openPrimaryMenuAction() {
+  if (hasSessionUser.value) {
+    closeMenu();
+    window.location.href = '/profil';
+    return;
+  }
+
+  openAuthFromMenu();
 }
 
 function logoutFromMenu() {

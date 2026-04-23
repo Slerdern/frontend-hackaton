@@ -327,7 +327,7 @@ async function handleLogin(payload) {
   authMessage.value = '';
   try {
     await authStore.loginUser(payload);
-    authMessage.value = 'Connexion reussie.';
+    authMessage.value = 'connexion réussie.';
   } catch (error) {
     authMessage.value = readError(error);
   }
@@ -347,7 +347,7 @@ async function handleLogout() {
   authMessage.value = '';
   try {
     const result = await authStore.logoutUser();
-    authMessage.value = result?.message || 'Deconnexion reussie.';
+    authMessage.value = result?.message || 'Deconnexion réussie.';
   } catch (error) {
     authMessage.value = readError(error);
   }
