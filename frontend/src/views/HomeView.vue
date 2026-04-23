@@ -197,6 +197,23 @@
       @send="runAiSearch"
     />
 
+    <button
+      type="button"
+      class="chatbot-fab"
+      :class="{ open: chatOpen }"
+      :aria-expanded="chatOpen"
+      aria-label="Ouvrir le chatbot pour personnaliser votre recherche"
+      @click="toggleChat"
+    >
+      <span class="chatbot-fab-ring" aria-hidden="true"></span>
+      <span class="chatbot-fab-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" role="presentation">
+          <path d="M4 5.5A2.5 2.5 0 0 1 6.5 3h11A2.5 2.5 0 0 1 20 5.5v8A2.5 2.5 0 0 1 17.5 16H11l-4.5 4v-4H6.5A2.5 2.5 0 0 1 4 13.5v-8ZM8 7.5a1 1 0 1 0 0 2 1 1 0 0 0 0-2Zm4 0a1 1 0 1 0 0 2 1 1 0 0 0 0-2Zm4 0a1 1 0 1 0 0 2 1 1 0 0 0 0-2Z" />
+        </svg>
+      </span>
+      <span class="chatbot-fab-text">Chatbot pour personnaliser votre recherche</span>
+    </button>
+
     <div v-if="toastMessage" class="toast-bubble" role="status" aria-live="polite">
       {{ toastMessage }}
     </div>

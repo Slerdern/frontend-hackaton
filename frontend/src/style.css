@@ -26,10 +26,35 @@ body,
 body {
   font-family: Roboto, sans-serif;
   color: var(--ink);
-  background:
-    radial-gradient(circle at 15% -10%, rgb(199 157 90 / 0.18), transparent 38%),
-    radial-gradient(circle at 95% 8%, rgb(185 15 49 / 0.08), transparent 26%),
-    var(--bg);
+  background: var(--bg);
+}
+
+@keyframes chatbot-bounce {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+@keyframes chatbot-ring-pulse {
+  0% {
+    transform: scale(0.92);
+    opacity: 0.75;
+  }
+
+  70% {
+    transform: scale(1.16);
+    opacity: 0;
+  }
+
+  100% {
+    transform: scale(1.16);
+    opacity: 0;
+  }
 }
 
 .home-page {
@@ -945,6 +970,88 @@ button {
   font-family: Sansita, sans-serif;
   font-size: 14px;
   box-shadow: 0 14px 28px rgb(0 0 0 / 0.2);
+}
+
+.chatbot-fab {
+  position: fixed;
+  right: 16px;
+  bottom: 22px;
+  z-index: 78;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  max-width: min(88vw, 440px);
+  padding: 10px 16px 10px 10px;
+  border: 1px solid rgb(197 162 76 / 0.45);
+  border-radius: 999px;
+  background: rgb(255 251 243 / 0.95);
+  color: var(--ink);
+  box-shadow: 0 14px 30px rgb(31 20 7 / 0.16);
+  backdrop-filter: blur(10px);
+  animation: chatbot-bounce 2.3s ease-in-out infinite;
+}
+
+.chatbot-fab:hover {
+  box-shadow: 0 16px 34px rgb(31 20 7 / 0.2);
+}
+
+.chatbot-fab:focus-visible {
+  outline: 2px solid rgb(185 15 49 / 0.24);
+  outline-offset: 3px;
+}
+
+.chatbot-fab.open {
+  border-color: rgb(185 15 49 / 0.4);
+}
+
+.chatbot-fab-ring {
+  position: absolute;
+  inset: -8px;
+  border-radius: inherit;
+  border: 2px solid rgb(197 162 76 / 0.28);
+  animation: chatbot-ring-pulse 2.3s ease-out infinite;
+  pointer-events: none;
+}
+
+.chatbot-fab-icon {
+  position: relative;
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  flex: none;
+  color: #fff;
+  background: linear-gradient(135deg, var(--brand-red), #8f0c28);
+  box-shadow: 0 8px 16px rgb(185 15 49 / 0.28);
+}
+
+.chatbot-fab-icon svg {
+  width: 22px;
+  height: 22px;
+  fill: currentcolor;
+}
+
+.chatbot-fab-text {
+  font-family: Roboto, sans-serif;
+  font-size: 13px;
+  line-height: 1.15;
+  font-weight: 800;
+  color: #2a241f;
+  text-align: left;
+}
+
+@media (width <= 520px) {
+  .chatbot-fab {
+    right: 12px;
+    bottom: 16px;
+    max-width: calc(100vw - 24px);
+    padding-right: 12px;
+  }
+
+  .chatbot-fab-text {
+    font-size: 12px;
+  }
 }
 
 @media (width >= 900px) {
