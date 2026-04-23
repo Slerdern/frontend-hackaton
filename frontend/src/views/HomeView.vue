@@ -12,6 +12,11 @@
     <CardSection title="Recommandes des experts certifies par le Guide Michelin" :items="sections.experts" />
     <CardSection title="Nos dernieres selections - Restaurants" :items="sections.latest" />
     <CardSection title="Autres adresses a decouvrir" :items="sections.extra" />
+    <ConceptsSection />
+    <ArticlesSection />
+    <MichelinGuideSection />
+    <AboutSection />
+    <PartnersSection />
 
     <AppFooter />
 
@@ -41,11 +46,16 @@ import { onMounted, reactive, ref } from 'vue';
 import axios from 'axios';
 
 import AppFooter from '../components/AppFooter.vue';
+import AboutSection from '../components/AboutSection.vue';
+import ArticlesSection from '../components/ArticlesSection.vue';
 import AuthPanel from '../components/AuthPanel.vue';
 import CardSection from '../components/CardSection.vue';
 import ChatbotPanel from '../components/ChatbotPanel.vue';
+import ConceptsSection from '../components/ConceptsSection.vue';
 import HeroSection from '../components/HeroSection.vue';
+import MichelinGuideSection from '../components/MichelinGuideSection.vue';
 import NavBar from '../components/NavBar.vue';
+import PartnersSection from '../components/PartnersSection.vue';
 import { getWelcomeMessage, searchWithAi } from '../services/aiService';
 import { searchRestaurants } from '../services/restaurantService';
 import { useAuthStore } from '../stores/authStore';
@@ -68,14 +78,14 @@ const sections = reactive({
 });
 
 function splitForSections(restaurants) {
-  sections.experts = restaurants.slice(0, 2);
-  sections.latest = restaurants.slice(2, 4);
-  sections.extra = restaurants.slice(4, 6);
+  sections.experts = restaurants.slice(0, 4);
+  sections.latest = restaurants.slice(4, 8);
+  sections.extra = restaurants.slice(8, 12);
 }
 
 async function loadInitialFeed() {
   try {
-    const results = await searchRestaurants({ latitude: 48.8566, longitude: 2.3522, radius: 3000, limit: 6 });
+    const results = await searchRestaurants({ latitude: 48.8566, longitude: 2.3522, radius: 3000, limit: 12 });
     splitForSections(results || []);
   } catch (error) {
     console.error('Erreur chargement feed', error);
@@ -89,7 +99,7 @@ async function runClassicSearch() {
       longitude: 2.3522,
       radius: 3000,
       name: query.value || undefined,
-      limit: 6
+      limit: 12
     };
     const results = await searchRestaurants(payload);
     splitForSections(results || []);
@@ -168,4 +178,3 @@ onMounted(() => {
   loadInitialFeed();
 });
 </script>
-
