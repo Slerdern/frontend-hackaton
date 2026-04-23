@@ -80,6 +80,7 @@ import RestaurantCard from '../components/RestaurantCard.vue';
 import { getHotelsHomeFeed, searchHotels } from '../services/hotelService';
 import { searchRestaurants } from '../services/restaurantService';
 import { useAuthStore } from '../stores/authStore';
+import { toAbsoluteImageUrl } from '../utils/formatters';
 
 const authStore = useAuthStore();
 const route = useRoute();
@@ -123,7 +124,7 @@ function mapHotelsToCards(items) {
     location: hotel.country || 'Lieu non renseigne',
     cuisine: hotel.marketSegment || 'Hebergement',
     price: toHotelPrice(hotel.avgAdr),
-    photoUrl: hotel.photoUrl
+    photoUrl: toAbsoluteImageUrl(hotel.photoUrl, hotel.name)
   }));
 }
 

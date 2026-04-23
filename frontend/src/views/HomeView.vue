@@ -143,11 +143,15 @@
 
     <ChatbotPanel
       :open="chatOpen"
+      :mode="chatMode"
       :loading="chatLoading"
-      :welcome-message="welcomeMessage"
-      :assistant-message="assistantMessage"
-      :follow-ups="followUps"
+      :welcome-message="welcomeMessages[chatMode]"
+      :assistant-message="assistantMessages[chatMode]"
+      :follow-ups="followUpsByMode[chatMode]"
+      :restaurants="chatRestaurants"
+      :hotels="chatHotels"
       @close="chatOpen = false"
+      @change-mode="changeChatMode"
       @send="runAiSearch"
     />
 
@@ -168,10 +172,11 @@ import CardSection from '../components/CardSection.vue';
 import ChatbotPanel from '../components/ChatbotPanel.vue';
 import HeroSection from '../components/HeroSection.vue';
 import NavBar from '../components/NavBar.vue';
-import { getWelcomeMessage, searchWithAi } from '../services/aiService';
+import { getHotelWelcomeMessage, getWelcomeMessage, searchHotelWithAi, searchWithAi } from '../services/aiService';
 import { getHotelsHomeFeed } from '../services/hotelService';
 import { searchRestaurants } from '../services/restaurantService';
 import { useAuthStore } from '../stores/authStore';
+import { toAbsoluteImageUrl } from '../utils/formatters';
 
 const authStore = useAuthStore();
 const router = useRouter();
@@ -179,11 +184,23 @@ const router = useRouter();
 const query = ref('');
 const authOpen = ref(false);
 const chatOpen = ref(false);
+const chatMode = ref('restaurants');
 const authMessage = ref('');
-const welcomeMessage = ref('');
-const assistantMessage = ref('');
+const welcomeMessages = reactive({
+  restaurants: '',
+  hotels: ''
+});
+const assistantMessages = reactive({
+  restaurants: '',
+  hotels: ''
+});
 const chatLoading = ref(false);
-const followUps = ref([]);
+const followUpsByMode = reactive({
+  restaurants: [],
+  hotels: []
+});
+const chatRestaurants = ref([]);
+const chatHotels = ref([]);
 const toastMessage = ref('');
 
 let toastTimeoutId = null;
@@ -526,7 +543,7 @@ function mapHotelsToCards(hotels) {
     location: hotel.country || 'Lieu non renseigne',
     cuisine: hotel.marketSegment || 'Hebergement',
     price: toHotelPrice(hotel.avgAdr),
-    photoUrl: hotel.photoUrl
+    photoUrl: toAbsoluteImageUrl(hotel.photoUrl, hotel.name)
   }));
 }
 
@@ -562,6 +579,15 @@ async function fetchPersonalizedStays() {
 function splitUnifiedResults(restaurants, hotels) {
   splitForSections(restaurants || []);
   sections.stays = (hotels || []).slice(0, 3);
+}
+
+function clearChatResults(mode) {
+  if (mode === 'restaurants') {
+    chatRestaurants.value = [];
+    return;
+  }
+
+  chatHotels.value = [];
 }
 
 function buildUnifiedSearchPayload(searchText) {
@@ -637,30 +663,61 @@ function toggleChat() {
 
 async function openChat() {
   chatOpen.value = true;
-  if (welcomeMessage.value) {
+  const mode = chatMode.value;
+  if (welcomeMessages[mode]) {
     return;
   }
   try {
-    const welcome = await getWelcomeMessage();
-    welcomeMessage.value = welcome.message || '';
-    followUps.value = welcome.suggestedPrompts || [];
+    const welcome = mode === 'hotels' ? await getHotelWelcomeMessage() : await getWelcomeMessage();
+    welcomeMessages[mode] = welcome.message || '';
+    followUpsByMode[mode] = welcome.suggestedPrompts || welcome.suggestedFollowUps || [];
   } catch (error) {
-    welcomeMessage.value = readError(error);
+    welcomeMessages[mode] = readError(error);
   }
 }
 
 async function runAiSearch(payload) {
   chatLoading.value = true;
   try {
-    const response = await searchWithAi(payload);
-    assistantMessage.value = response.assistantMessage || response.intentSummary || '';
-    followUps.value = response.suggestedFollowUps || [];
-    splitUnifiedResults(response.restaurants || [], sections.stays);
+    const mode = chatMode.value;
+    const requestBody =
+      mode === 'hotels'
+        ? {
+            message: payload.message,
+            limit: payload.limit || 6
+          }
+        : {
+            message: payload.message,
+            latitude: payload.latitude,
+            longitude: payload.longitude,
+            radius: payload.radius,
+            limit: payload.limit || 6
+          };
+
+    const response = mode === 'hotels' ? await searchHotelWithAi(requestBody) : await searchWithAi(requestBody);
+    assistantMessages[mode] = response.assistantMessage || response.intentSummary || '';
+    followUpsByMode[mode] = response.suggestedFollowUps || response.suggestedPrompts || [];
+    if (mode === 'hotels') {
+      chatHotels.value = response.hotels || [];
+    } else {
+      chatRestaurants.value = response.restaurants || [];
+      sections.stays = response.hotels || sections.stays;
+    }
   } catch (error) {
-    assistantMessage.value = readError(error);
+    assistantMessages[chatMode.value] = readError(error);
   } finally {
     chatLoading.value = false;
   }
+}
+
+function changeChatMode(nextMode) {
+  if (chatMode.value === nextMode) {
+    return;
+  }
+
+  chatMode.value = nextMode;
+  clearChatResults(nextMode);
+  openChat();
 }
 
 async function handleLogin(payload) {
