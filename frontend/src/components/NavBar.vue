@@ -76,6 +76,7 @@
             <button type="button" class="logout-btn" @click="logoutFromMenu">Déconnexion</button>
           </div>
         </div>
+      </div>
 
       <button class="menu-location-btn" type="button" @click="activateLocation" :disabled="locationPending" :aria-busy="locationPending">
         <span>{{ locationPending ? 'Localisation en cours...' : locationLabel }}</span>
