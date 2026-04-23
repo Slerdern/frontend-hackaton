@@ -9,9 +9,12 @@
   >
     <img :src="imageSrc" :alt="restaurant.name" @error="handleImageError" />
     <div class="restaurant-card-footer">
+      <img src="/img/key.png" alt="Clef du Guide MICHELIN">
       <strong>{{ displayName }}</strong>
-      <p class="card-detail">{{ locationLabel }}</p>
-      <p class="card-detail card-detail--muted">{{ metadataLabel }}</p>
+      <div class="card-detail">
+      <p>{{ locationLabel }}</p>
+      <p class="card-detail-muted">{{ metadataLabel }}</p>
+      </div>
     </div>
   </a>
 
@@ -20,9 +23,10 @@
       <img :src="imageSrc" :alt="restaurant.name" @error="handleImageError" />
     </div>
     <div class="restaurant-card-footer">
+      <img src="/img/key.png" alt="Clef du Guide MICHELIN">
       <strong>{{ displayName }}</strong>
       <p class="card-detail">{{ locationLabel }}</p>
-      <p class="card-detail card-detail--muted">{{ metadataLabel }}</p>
+      <p class="card-detail card-detail-muted">{{ metadataLabel }}</p>
     </div>
   </article>
 </template>
