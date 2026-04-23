@@ -1,64 +1,65 @@
 <template>
-  <div v-if="open" class="side-panel-backdrop" @click.self="$emit('close')">
-    <aside class="side-panel" v-if="open">
-    <div class="panel-header">
-      <h3>Inscription / Connexion</h3>
-      <button @click="$emit('close')">x</button>
-    </div>
-
-    <div class="auth-status">
-      <template v-if="isAuthenticated">
-        <div v-if="open" class="side-panel-backdrop" @click.self="$emit('close')">
-        <p class="hint">Connecté{{ userEmail ? ` : ${userEmail}` : '' }}</p>
-        <button :disabled="loading" type="button" @click="emit('logout')">
-          {{ loading ? 'Chargement...' : 'Se déconnecter' }}
-        </button>
+  <div v-if="open" class="side-panel-backdrop auth-panel-backdrop" @click.self="$emit('close')">
+    <aside class="side-panel auth-panel" aria-label="Inscription / Connexion">
+      <header class="panel-header auth-panel-header">
+        <div>
+          <p class="auth-panel-kicker">Guide MICHELIN</p>
+          <h3>Inscription / Connexion</h3>
         </div>
-      </template>
-      <template v-else>
-        <p class="hint">Vous n'êtes pas connecté.</p>
-        <form class="auth-form" @submit.prevent="handleSubmit">
-          <input
-            v-model="email"
-            type="email"
-            placeholder="Email"
-            autocomplete="username"
-            required
-          />
-          <input
-            v-model="password"
-            type="password"
-            placeholder="Mot de passe"
-            autocomplete="current-password"
-            required
-          />
-          <input
-            v-if="mode === 'signup'"
-            v-model="fullName"
-            type="text"
-            placeholder="Nom complet"
-            autocomplete="name"
-            required
-          />
-          <div class="auth-actions">
-            <button type="submit" :disabled="loading">
-              {{ loading ? (mode === 'login' ? 'Connexion...' : 'Inscription...') : (mode === 'login' ? 'Se connecter' : 'Créer un compte') }}
-            </button>
-            <button type="button" class="switch-auth-mode" @click="toggleMode" :disabled="loading">
-              {{ mode === 'login' ? "Créer un compte" : "J'ai déjà un compte" }}
-            </button>
-          </div>
-        </form>
-      </template>
-    </div>
+        <button type="button" class="menu-close-btn" @click="$emit('close')" aria-label="Fermer le panneau">✕</button>
+      </header>
 
-    <p class="hint" v-if="message">{{ message }}</p>
-  </aside>
+      <div class="auth-status">
+        <template v-if="isAuthenticated">
+          <p class="hint">Connecté{{ userEmail ? ` : ${userEmail}` : '' }}</p>
+          <button class="auth-primary-btn" :disabled="loading" type="button" @click="emit('logout')">
+            {{ loading ? 'Chargement...' : 'Se déconnecter' }}
+          </button>
+        </template>
+        <template v-else>
+          <p class="hint">Vous n'êtes pas connecté.</p>
+          <form class="auth-form" @submit.prevent="handleSubmit">
+            <input
+              v-model="email"
+              type="email"
+              placeholder="Email"
+              autocomplete="username"
+              required
+            />
+            <input
+              v-model="password"
+              type="password"
+              placeholder="Mot de passe"
+              autocomplete="current-password"
+              required
+            />
+            <input
+              v-if="mode === 'signup'"
+              v-model="fullName"
+              type="text"
+              placeholder="Nom complet"
+              autocomplete="name"
+              required
+            />
+            <div class="auth-actions">
+              <button class="auth-primary-btn" type="submit" :disabled="loading">
+                {{ loading ? (mode === 'login' ? 'Connexion...' : 'Inscription...') : (mode === 'login' ? 'Se connecter' : 'Créer un compte') }}
+              </button>
+              <button type="button" class="switch-auth-mode" @click="toggleMode" :disabled="loading">
+                {{ mode === 'login' ? "Créer un compte" : "J'ai déjà un compte" }}
+              </button>
+            </div>
+          </form>
+        </template>
+      </div>
+
+      <p class="hint" v-if="message">{{ message }}</p>
+    </aside>
   </div>
 </template>
 
 <script setup>
-import { computed, ref } from 'vue';
+import { ref } from 'vue';
 
 defineProps({
   open: Boolean,
@@ -101,6 +102,29 @@ function handleSubmit() {
 }
 </script>
 <style scoped>
+.auth-panel {
+  gap: 0.9rem;
+}
+
+.auth-panel-header {
+  align-items: flex-start;
+}
+
+.auth-panel-kicker {
+  margin: 0 0 0.15rem;
+  color: #b90f31;
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.auth-panel h3 {
+  margin: 0;
+  font-family: Sansita, sans-serif;
+  font-size: 1.35rem;
+}
+
 .auth-form {
   display: flex;
   flex-direction: column;
@@ -123,8 +147,10 @@ function handleSubmit() {
   display: flex;
   gap: 0.5rem;
   align-items: center;
+  flex-wrap: wrap;
 }
-.auth-form button[type="submit"] {
+
+.auth-primary-btn {
   flex: 1;
   background: #c30039;
   color: #fff;
@@ -136,9 +162,15 @@ function handleSubmit() {
   cursor: pointer;
   transition: background 0.2s;
 }
-.auth-form button[type="submit"]:hover:not(:disabled) {
+
+.auth-primary-btn:hover:not(:disabled) {
   background: #a0002e;
 }
+
+.auth-primary-btn:disabled {
+  opacity: 0.7;
+}
+
 .switch-auth-mode {
   background: none;
   border: none;
@@ -152,6 +184,11 @@ function handleSubmit() {
 }
 .switch-auth-mode:hover:not(:disabled) {
   background: #f5e6ed;
+}
+
+.auth-status {
+  display: grid;
+  gap: 0.8rem;
 }
 </style>
 

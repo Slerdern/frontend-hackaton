@@ -1,6 +1,6 @@
 <template>
   <header class="top-shell">
-    <nav class="main-nav">
+    <nav class="main-nav" aria-label="Navigation principale">
       <a href="/" class="brand-btn" aria-label="Accueil"><svg width="40" height="40" viewBox="0 0 45 45" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
         <circle cx="22.5" cy="22.5" r="22.5" fill="white"/>
         <rect x="5" y="5" width="35" height="35" fill="url(#pattern0_219_15)"/>
@@ -34,16 +34,26 @@
           Inscription / Connexion
         </button>
       </template>
-      <button class="menu-btn" :class="{ 'nav-action-hidden': menuOpen }" @click="menuOpen = !menuOpen" :aria-expanded="menuOpen" aria-label="Ouvrir le menu"><svg width="20" height="16" viewBox="0 0 20 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M20 14.7368C20 15.0719 19.8683 15.3931 19.6339 15.63C19.3995 15.8669 19.0815 16 18.75 16L6.25 16C5.91848 16 5.60054 15.8669 5.36612 15.63C5.1317 15.3931 5 15.0719 5 14.7368C5 14.4018 5.1317 14.0805 5.36612 13.8437C5.60054 13.6068 5.91848 13.4737 6.25 13.4737L18.75 13.4737C19.0815 13.4737 19.3995 13.6068 19.6339 13.8437C19.8683 14.0805 20 14.4018 20 14.7368ZM20 1.26316C20 1.59817 19.8683 1.91946 19.6339 2.15634C19.3995 2.39323 19.0815 2.52632 18.75 2.52632L7.91667 2.52632C7.58515 2.52632 7.2672 2.39323 7.03278 2.15634C6.79836 1.91946 6.66667 1.59817 6.66667 1.26316C6.66667 0.928147 6.79836 0.606859 7.03278 0.369971C7.2672 0.133082 7.58515 0 7.91667 0L18.75 0C19.0815 0 19.3995 0.133082 19.6339 0.369971C19.8683 0.606859 20 0.928147 20 1.26316ZM18.75 9.26316C19.0815 9.26316 19.3995 9.13008 19.6339 8.89319C19.8683 8.6563 20 8.33501 20 8C20 7.66499 19.8683 7.3437 19.6339 7.10681C19.3995 6.86992 19.0815 6.73684 18.75 6.73684L1.25 6.73684C0.91848 6.73684 0.600538 6.86992 0.366117 7.10681C0.131697 7.3437 0 7.66499 0 8C0 8.33501 0.131697 8.6563 0.366117 8.89319C0.600538 9.13008 0.91848 9.26316 1.25 9.26316L18.75 9.26316Z" fill="white"/>
+      <button
+        class="menu-btn"
+        type="button"
+        :aria-expanded="menuOpen"
+        :aria-label="menuOpen ? 'Fermer le menu' : 'Ouvrir le menu'"
+        @click="toggleMenu"
+      >
+        <svg v-if="!menuOpen" width="20" height="16" viewBox="0 0 20 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M20 14.7368C20 15.0719 19.8683 15.3931 19.6339 15.63C19.3995 15.8669 19.0815 16 18.75 16L6.25 16C5.91848 16 5.60054 15.8669 5.36612 15.63C5.1317 15.3931 5 15.0719 5 14.7368C5 14.4018 5.1317 14.0805 5.36612 13.8437C5.60054 13.6068 5.91848 13.4737 6.25 13.4737L18.75 13.4737C19.0815 13.4737 19.3995 13.6068 19.6339 13.8437C19.8683 14.0805 20 14.4018 20 14.7368ZM20 1.26316C20 1.59817 19.8683 1.91946 19.6339 2.15634C19.3995 2.39323 19.0815 2.52632 18.75 2.52632L7.91667 2.52632C7.58515 2.52632 7.2672 2.39323 7.03278 2.15634C6.79836 1.91946 6.66667 1.59817 6.66667 1.26316C6.66667 0.928147 6.79836 0.606859 7.03278 0.369971C7.2672 0.133082 7.58515 0 7.91667 0L18.75 0C19.0815 0 19.3995 0.133082 19.6339 0.369971C19.8683 0.606859 20 0.928147 20 1.26316ZM18.75 9.26316C19.0815 9.26316 19.3995 9.13008 19.6339 8.89319C19.8683 8.6563 20 8.33501 20 8C20 7.66499 19.8683 7.3437 19.6339 7.10681C19.3995 6.86992 19.0815 6.73684 18.75 6.73684L1.25 6.73684C0.91848 6.73684 0.600538 6.86992 0.366117 7.10681C0.131697 7.3437 0 7.66499 0 8C0 8.33501 0.131697 8.6563 0.366117 8.89319C0.600538 9.13008 0.91848 9.26316 1.25 9.26316L18.75 9.26316Z" fill="white"/>
+        </svg>
+        <svg v-else width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M4.2 4.2a1 1 0 0 1 1.4 0L9 7.6l3.4-3.4a1 1 0 1 1 1.4 1.4L10.4 9l3.4 3.4a1 1 0 0 1-1.4 1.4L9 10.4l-3.4 3.4a1 1 0 0 1-1.4-1.4L7.6 9 4.2 5.6a1 1 0 0 1 0-1.4Z" fill="white"/>
         </svg>
       </button>
     </nav>
 
     <div v-if="menuOpen" class="side-panel-backdrop" @click.self="closeMenu">
-      <div class="side-panel side-menu-panel" role="dialog" aria-label="Navigation du site">
+      <aside class="side-panel side-menu-panel" aria-label="Navigation du site">
         <div class="panel-header">
-          <button type="button" class="menu-close-btn" @click="menuOpen = false" aria-label="Fermer le menu">
+          <button type="button" class="menu-close-btn" @click="closeMenu" aria-label="Fermer le menu">
             <svg width="20" height="16" viewBox="0 0 20 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
               <path d="M20 14.7368C20 15.0719 19.8683 15.3931 19.6339 15.63C19.3995 15.8669 19.0815 16 18.75 16L6.25 16C5.91848 16 5.60054 15.8669 5.36612 15.63C5.1317 15.3931 5 15.0719 5 14.7368C5 14.4018 5.1317 14.0805 5.36612 13.8437C5.60054 13.6068 5.91848 13.4737 6.25 13.4737L18.75 13.4737C19.0815 13.4737 19.3995 13.6068 19.6339 13.8437C19.8683 14.0805 20 14.4018 20 14.7368ZM20 1.26316C20 1.59817 19.8683 1.91946 19.6339 2.15634C19.3995 2.39323 19.0815 2.52632 18.75 2.52632L7.91667 2.52632C7.58515 2.52632 7.2672 2.39323 7.03278 2.15634C6.79836 1.91946 6.66667 1.59817 6.66667 1.26316C6.66667 0.928147 6.79836 0.606859 7.03278 0.369971C7.2672 0.133082 7.58515 0 7.91667 0L18.75 0C19.0815 0 19.3995 0.133082 19.6339 0.369971C19.8683 0.606859 20 0.928147 20 1.26316ZM18.75 9.26316C19.0815 9.26316 19.3995 9.13008 19.6339 8.89319C19.8683 8.6563 20 8.33501 20 8C20 7.66499 19.8683 7.3437 19.6339 7.10681C19.3995 6.86992 19.0815 6.73684 18.75 6.73684L1.25 6.73684C0.91848 6.73684 0.600538 6.86992 0.366117 7.10681C0.131697 7.3437 0 7.66499 0 8C0 8.33501 0.131697 8.6563 0.366117 8.89319C0.600538 9.13008 0.91848 9.26316 1.25 9.26316L18.75 9.26316Z" fill="white"/>
             </svg>
@@ -63,7 +73,8 @@
           <div>
             <img
               :src="user?.avatar || '/img/default-profile-picture.png'"
-              alt="Photo de profil"
+              alt=""
+              aria-hidden="true"
             />
           </div>
           <div class="panel-user-infos">
@@ -87,20 +98,20 @@
       </button>
 
       <nav class="menu-links" aria-label="Liens de navigation">
-        <a href="#top" @click="closeMenu">Accueil</a>
-        <a href="#experts" @click="closeMenu">Recommandés des experts</a>
-        <a href="#concepts" @click="closeMenu">Nos concepts</a>
-        <a href="#articles" @click="closeMenu">Nos articles</a>
-        <a href="#guide-michelin" @click="closeMenu">En savoir plus sur le Guide Michelin</a>
-        <a href="#about" @click="closeMenu">En savoir plus sur nous</a>
-        <a href="#partners" @click="closeMenu">Nos partenaires</a>
+        <button type="button" @click="scrollToAnchor('top')">Accueil</button>
+        <button type="button" @click="scrollToAnchor('experts')">Recommandés des experts</button>
+        <button type="button" @click="scrollToAnchor('concepts')">Nos concepts</button>
+        <button type="button" @click="scrollToAnchor('articles')">Nos articles</button>
+        <button type="button" @click="scrollToAnchor('guide-michelin')">En savoir plus sur le Guide Michelin</button>
+        <button type="button" @click="scrollToAnchor('about')">En savoir plus sur nous</button>
+        <button type="button" @click="scrollToAnchor('partners')">Nos partenaires</button>
       </nav>
 
       <div class="menu-branding" aria-hidden="true">
         <img src="/img/logo-favicon.png" alt="" class="menu-branding-logo" />
         <p class="menu-branding-title">Guide MICHELIN</p>
       </div>
-      </div>
+      </aside>
     </div>
   </header>
 </template>
@@ -139,19 +150,26 @@ function closeMenu() {
   menuOpen.value = false;
 }
 
+function toggleMenu() {
+  menuOpen.value = !menuOpen.value;
+}
+
 function openAuthFromMenu() {
   closeMenu();
   emit('toggle-auth');
 }
 
-function openPrimaryMenuAction() {
-  if (hasSessionUser.value) {
-    closeMenu();
-    window.location.href = '/profil';
+function scrollToAnchor(targetId) {
+  closeMenu();
+
+  if (!targetId) {
     return;
   }
 
-  openAuthFromMenu();
+  const target = document.getElementById(targetId);
+  if (target) {
+    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
 }
 
 function logoutFromMenu() {
