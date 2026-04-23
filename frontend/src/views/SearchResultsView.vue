@@ -127,8 +127,84 @@ function mapHotelsToCards(items) {
   }));
 }
 
-function buildSearchPayload(term) {
+const cityToCountryMap = {
+  metz: 'france',
+  paris: 'france',
+  lyon: 'france',
+  marseille: 'france',
+  nice: 'france',
+  bordeaux: 'france',
+  lille: 'france',
+  nantes: 'france',
+  strasbourg: 'france',
+  toulouse: 'france'
+};
+
+const cuisineMap = {
+  japonais: 'japanese',
+  japonaise: 'japanese',
+  italien: 'italian',
+  italienne: 'italian',
+  francais: 'french',
+  francaise: 'french',
+  mediterraneen: 'mediterranean',
+  mediterraneenne: 'mediterranean',
+  espagnol: 'spanish',
+  espagnole: 'spanish',
+  thai: 'thai',
+  indien: 'indian',
+  indienne: 'indian',
+  chinois: 'chinese',
+  chinoise: 'chinese',
+  vietnamien: 'vietnamese',
+  vietnamienne: 'vietnamese'
+};
+
+function normalizeTerm(value) {
+  return (value || '')
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .trim()
+    .toLowerCase();
+}
+
+function resolveCountryFromCity(term) {
+  const normalized = normalizeTerm(term);
+  return cityToCountryMap[normalized] || null;
+}
+
+function resolveCuisineFromTerm(term) {
+  const normalized = normalizeTerm(term);
+  return cuisineMap[normalized] || null;
+}
+
+function buildRestaurantSearchPayload(term) {
   const trimmed = term?.trim();
+  const cuisine = resolveCuisineFromTerm(trimmed);
+
+  if (cuisine) {
+    return {
+      cuisine,
+      limit: 24,
+      sortBy: 'score',
+      sortDirection: 'desc'
+    };
+  }
+
+  return {
+    limit: 24,
+    sortBy: 'score',
+    sortDirection: 'desc',
+    ...(trimmed
+      ? {
+          name: trimmed,
+          location: resolveCountryFromCity(trimmed) ? trimmed : undefined
+        }
+      : {})
+  };
+}
+
+function buildSearchPayload(term) {
   const baseSort = {
     limit: 24,
     sortBy: 'score',
@@ -140,12 +216,7 @@ function buildSearchPayload(term) {
       latitude: 48.8566,
       longitude: 2.3522,
       radius: 3000,
-      ...baseSort,
-      ...(trimmed
-        ? {
-            name: trimmed
-          }
-        : {})
+      ...buildRestaurantSearchPayload(term)
     },
     hotelBasePayload: baseSort
   };
@@ -164,32 +235,6 @@ function dedupeHotelsById(items) {
     seen.add(key);
     return true;
   });
-}
-
-const cityToCountryMap = {
-  metz: 'france',
-  paris: 'france',
-  lyon: 'france',
-  marseille: 'france',
-  nice: 'france',
-  bordeaux: 'france',
-  lille: 'france',
-  nantes: 'france',
-  strasbourg: 'france',
-  toulouse: 'france'
-};
-
-function normalizeTerm(value) {
-  return (value || '')
-    .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '')
-    .trim()
-    .toLowerCase();
-}
-
-function resolveCountryFromCity(term) {
-  const normalized = normalizeTerm(term);
-  return cityToCountryMap[normalized] || null;
 }
 
 async function searchHotelsUnified(term, hotelBasePayload) {
