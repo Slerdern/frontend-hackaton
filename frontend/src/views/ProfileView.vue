@@ -67,7 +67,7 @@
               <dd>{{ displayUser.preferences?.hotels?.budgetLevel || 'Non renseigne' }}</dd>
             </div>
             <div>
-              <dt>Segments preferes</dt>
+              <dt>Segments préféres</dt>
               <dd>{{ joinList(displayUser.preferences?.hotels?.preferredSegments) }}</dd>
             </div>
           </dl>
@@ -505,11 +505,7 @@ function joinList(value) {
 <style scoped>
 .profile-page {
   min-height: 100vh;
-  padding: 0 1.25rem 4rem;
-  background:
-    radial-gradient(circle at top left, rgba(195, 0, 57, 0.12), transparent 28%),
-    linear-gradient(180deg, #f9f5ef 0%, #ffffff 42%);
-  color: #171717;
+  padding-bottom: 4rem;
 }
 
 .profile-hero,
