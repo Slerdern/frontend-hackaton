@@ -18,7 +18,7 @@
     <section class="content-shell">
       <CardSection
         id="personalized-stays"
-        title="Vos lieux preferes"
+        title="Vos lieux préféres"
         :items="sections.personalizedStays"
       />
       <CardSection id="experts" title="Recommandes des experts certifies par le Guide Michelin" :items="sections.experts" />
@@ -68,18 +68,20 @@
             <div class="article-copy">
               <h3>{{ article.title }}</h3>
               <div class="article-meta">
-                <span class="article-meta-item">
-                  <svg viewBox="0 0 24 24" aria-hidden="true">
-                    <path d="M12 7a1 1 0 0 1 1 1v3.59l2.7 2.7a1 1 0 1 1-1.4 1.42l-3-3A1 1 0 0 1 11 12V8a1 1 0 0 1 1-1Zm0-5a10 10 0 1 1 0 20 10 10 0 0 1 0-20Zm0 2a8 8 0 1 0 0 16 8 8 0 0 0 0-16Z" />
-                  </svg>
-                  {{ article.readTime }}
-                </span>
-                <span class="article-meta-item">
-                  <svg viewBox="0 0 24 24" aria-hidden="true">
-                    <path d="M7 2a1 1 0 0 1 1 1v1h8V3a1 1 0 1 1 2 0v1h1a3 3 0 0 1 3 3v11a3 3 0 0 1-3 3H5a3 3 0 0 1-3-3V7a3 3 0 0 1 3-3h1V3a1 1 0 0 1 1-1Zm13 8H4v8a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-8ZM5 6a1 1 0 0 0-1 1v1h16V7a1 1 0 0 0-1-1H5Z" />
-                  </svg>
-                  {{ article.date }}
-                </span>
+                <div class="article-meta-left">
+                  <span class="article-meta-item">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="M12 7a1 1 0 0 1 1 1v3.59l2.7 2.7a1 1 0 1 1-1.4 1.42l-3-3A1 1 0 0 1 11 12V8a1 1 0 0 1 1-1Zm0-5a10 10 0 1 1 0 20 10 10 0 0 1 0-20Zm0 2a8 8 0 1 0 0 16 8 8 0 0 0 0-16Z" />
+                    </svg>
+                    {{ article.readTime }}
+                  </span>
+                  <span class="article-meta-item">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="M7 2a1 1 0 0 1 1 1v1h8V3a1 1 0 1 1 2 0v1h1a3 3 0 0 1 3 3v11a3 3 0 0 1-3 3H5a3 3 0 0 1-3-3V7a3 3 0 0 1 3-3h1V3a1 1 0 0 1 1-1Zm13 8H4v8a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-8ZM5 6a1 1 0 0 0-1 1v1h16V7a1 1 0 0 0-1-1H5Z" />
+                    </svg>
+                    {{ article.date }}
+                  </span>
+                </div>
                 <span class="article-tag">
                   <svg viewBox="0 0 24 24" aria-hidden="true">
                     <path d="M10 3a2 2 0 0 1 1.41.59l8 8a2 2 0 0 1 0 2.82l-5.59 5.59a2 2 0 0 1-2.82 0l-8-8A2 2 0 0 1 2.41 10L3 4a2 2 0 0 1 1.76-1.76L10 2.41V3Zm-4.59 8.59 7 7L18 13l-7-7-4.59.59-.59 4.59ZM8.5 8A1.5 1.5 0 1 0 8.5 5a1.5 1.5 0 0 0 0 3Z" />
@@ -114,18 +116,20 @@
             <div class="article-copy">
               <h3>{{ item.title }}</h3>
               <div class="article-meta">
-                <span class="article-meta-item">
-                  <svg viewBox="0 0 24 24" aria-hidden="true">
-                    <path d="M12 7a1 1 0 0 1 1 1v3.59l2.7 2.7a1 1 0 1 1-1.4 1.42l-3-3A1 1 0 0 1 11 12V8a1 1 0 0 1 1-1Zm0-5a10 10 0 1 1 0 20 10 10 0 0 1 0-20Zm0 2a8 8 0 1 0 0 16 8 8 0 0 0 0-16Z" />
-                  </svg>
-                  {{ item.readTime }}
-                </span>
-                <span class="article-meta-item">
-                  <svg viewBox="0 0 24 24" aria-hidden="true">
-                    <path d="M7 2a1 1 0 0 1 1 1v1h8V3a1 1 0 1 1 2 0v1h1a3 3 0 0 1 3 3v11a3 3 0 0 1-3 3H5a3 3 0 0 1-3-3V7a3 3 0 0 1 3-3h1V3a1 1 0 0 1 1-1Zm13 8H4v8a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-8ZM5 6a1 1 0 0 0-1 1v1h16V7a1 1 0 0 0-1-1H5Z" />
-                  </svg>
-                  {{ item.date }}
-                </span>
+                <div class="article-meta-left">
+                  <span class="article-meta-item">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="M12 7a1 1 0 0 1 1 1v3.59l2.7 2.7a1 1 0 1 1-1.4 1.42l-3-3A1 1 0 0 1 11 12V8a1 1 0 0 1 1-1Zm0-5a10 10 0 1 1 0 20 10 10 0 0 1 0-20Zm0 2a8 8 0 1 0 0 16 8 8 0 0 0 0-16Z" />
+                    </svg>
+                    {{ item.readTime }}
+                  </span>
+                  <span class="article-meta-item">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="M7 2a1 1 0 0 1 1 1v1h8V3a1 1 0 1 1 2 0v1h1a3 3 0 0 1 3 3v11a3 3 0 0 1-3 3H5a3 3 0 0 1-3-3V7a3 3 0 0 1 3-3h1V3a1 1 0 0 1 1-1Zm13 8H4v8a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-8ZM5 6a1 1 0 0 0-1 1v1h16V7a1 1 0 0 0-1-1H5Z" />
+                    </svg>
+                    {{ item.date }}
+                  </span>
+                </div>
                 <span class="article-tag">
                   <svg viewBox="0 0 24 24" aria-hidden="true">
                     <path d="M10 3a2 2 0 0 1 1.41.59l8 8a2 2 0 0 1 0 2.82l-5.59 5.59a2 2 0 0 1-2.82 0l-8-8A2 2 0 0 1 2.41 10L3 4a2 2 0 0 1 1.76-1.76L10 2.41V3Zm-4.59 8.59 7 7L18 13l-7-7-4.59.59-.59 4.59ZM8.5 8A1.5 1.5 0 1 0 8.5 5a1.5 1.5 0 0 0 0 3Z" />
